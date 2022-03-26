@@ -4,7 +4,7 @@ import { print } from "util";
 import * as vscode from "vscode";
 
 export class Commands implements vscode.Disposable {
-    private LANGUAGE_NAME  = "Octave";
+    private LANGUAGE_NAME = "Octave";
     private EXTENSION_NAME = "octave";
     private COMMANDS = "octave ";
 
@@ -16,9 +16,20 @@ export class Commands implements vscode.Disposable {
     private isRunning: boolean;
     private process;
 
+	terminalSetup() {
+		if (vscode.window.activeTerminal.name === this.LANGUAGE_NAME) {
+			this.terminal = vscode.window.activeTerminal;
+		}
+		else {
+			this.terminal = vscode.window.createTerminal(this.LANGUAGE_NAME);
+		}
+		this.terminal.sendText(`octave`);
+	}
     constructor() {
-        this.outputChannel = vscode.window.createOutputChannel(this.LANGUAGE_NAME);
-        this.terminal = vscode.window.createTerminal(this.LANGUAGE_NAME);
+        if (this.config.get("createOutputChannel", true)) {
+            this.outputChannel = vscode.window.createOutputChannel(this.LANGUAGE_NAME);
+        }
+		this.terminalSetup();
     }
 
     public async executeCommand(fileUri: vscode.Uri) {
@@ -51,13 +62,14 @@ export class Commands implements vscode.Disposable {
         }
     }
 
-    public executeCommandInTerminal(fileName: string, clearPreviousOutput, preserveFocus): void {
+	public executeCommandInTerminal(fileName: string, clearPreviousOutput, preserveFocus): void {
+		this.terminalSetup()
         if (clearPreviousOutput) {
             vscode.commands.executeCommand("workbench.action.terminal.clear");
         }
         this.terminal.show(preserveFocus);
-        this.terminal.sendText(`cd "${this.cwd}"`);
-        this.terminal.sendText(this.COMMANDS + fileName);
+        this.terminal.sendText(`cd \"${this.cwd.split("\\").join("/")}\"`);
+        this.terminal.sendText(fileName.replace(".m", ""));
     }
 
     public executeCommandInOutputChannel(fileName: string, clearPreviousOutput, preserveFocus): void {
