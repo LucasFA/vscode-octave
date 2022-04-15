@@ -26,6 +26,7 @@ export class Commands implements vscode.Disposable {
 		this.terminal.sendText(`octave`);
 	}
     constructor() {
+        this.config = vscode.workspace.getConfiguration(this.EXTENSION_NAME);
         if (this.config.get("createOutputChannel", true)) {
             this.outputChannel = vscode.window.createOutputChannel(this.LANGUAGE_NAME);
         }
