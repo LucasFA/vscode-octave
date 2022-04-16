@@ -16,21 +16,21 @@ export class Commands implements vscode.Disposable {
     private isRunning: boolean;
     private process;
 
-	terminalSetup() {
-		if (vscode.window.activeTerminal.name === this.LANGUAGE_NAME) {
-			this.terminal = vscode.window.activeTerminal;
-		}
-		else {
-			this.terminal = vscode.window.createTerminal(this.LANGUAGE_NAME);
-		}
-		this.terminal.sendText(`octave`);
-	}
+    terminalSetup() {
+        if (vscode.window.activeTerminal.name === this.LANGUAGE_NAME) {
+            this.terminal = vscode.window.activeTerminal;
+        }
+        else {
+            this.terminal = vscode.window.createTerminal(this.LANGUAGE_NAME);
+        }
+        this.terminal.sendText(`octave`);
+    }
     constructor() {
         this.config = vscode.workspace.getConfiguration(this.EXTENSION_NAME);
         if (this.config.get("createOutputChannel", true)) {
             this.outputChannel = vscode.window.createOutputChannel(this.LANGUAGE_NAME);
         }
-		this.terminalSetup();
+        this.terminalSetup();
     }
 
     public async executeCommand(fileUri: vscode.Uri) {
@@ -63,8 +63,8 @@ export class Commands implements vscode.Disposable {
         }
     }
 
-	public executeCommandInTerminal(fileName: string, clearPreviousOutput, preserveFocus): void {
-		this.terminalSetup()
+    public executeCommandInTerminal(fileName: string, clearPreviousOutput, preserveFocus): void {
+        this.terminalSetup()
         if (clearPreviousOutput) {
             vscode.commands.executeCommand("workbench.action.terminal.clear");
         }
