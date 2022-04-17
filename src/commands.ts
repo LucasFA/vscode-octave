@@ -16,15 +16,33 @@ export class Commands implements vscode.Disposable {
     private isRunning: boolean;
     private process;
 
-    private async terminalSetup() {
-        if (vscode.window.activeTerminal.name === this.LANGUAGE_NAME) {
-            this.terminal = vscode.window.activeTerminal;
+    private async chooseTerminal(): Promise<vscode.Terminal> {
+
+        if (vscode.window.terminals.length > 0) {
+            const activeTerminal = vscode.window.activeTerminal;
+            if (activeTerminal !== undefined && activeTerminal.name === this.LANGUAGE_NAME) {
+                return activeTerminal;
+            }
+
+            for (let i = vscode.window.terminals.length - 1; i >= 0; i--) {
+                const terminal = vscode.window.terminals[i];
+                if (terminal.name === this.LANGUAGE_NAME) {
+                    terminal.show(true);
+                    return terminal;
+                }
+            }
         }
-        else {
-            this.terminal = vscode.window.createTerminal(this.LANGUAGE_NAME);
-        }
-        this.terminal.sendText(`octave`);
+        let term = vscode.window.createTerminal(this.LANGUAGE_NAME);
+        term.sendText(this.LANGUAGE_NAME);
+        await this.delay(800); // let Octave warm up
+        
+        return term;
     }
+
+    private async delay(ms: number) {
+        return new Promise((resolve) => setTimeout(resolve, ms));
+    }
+
     constructor() {
         this.config = vscode.workspace.getConfiguration(this.EXTENSION_NAME);
         const createOutputChannel = this.config.get<boolean>("createOutputChannel", true);
@@ -57,7 +75,7 @@ export class Commands implements vscode.Disposable {
         const clearPreviousOutput = this.config.get<boolean>("clearPreviousOutput", true);
         const preserveFocus = this.config.get<boolean>("preserveFocus", true);
         if (runInTerminal) {
-            await this.terminalSetup();
+            this.terminal = await this.chooseTerminal();
             this.executeCommandInTerminal(fileName, clearPreviousOutput, preserveFocus);
         } else {
             this.executeCommandInOutputChannel(fileName, clearPreviousOutput, preserveFocus);
