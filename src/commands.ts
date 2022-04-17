@@ -44,8 +44,6 @@ export class Commands implements vscode.Disposable {
     }
     
     public async runLines(): Promise<void> {
-        vscode.window.showInformationMessage("Running lines is not yet implemented.");
-
         const editor = vscode.window.activeTextEditor;
         if (!editor) {
             vscode.window.showErrorMessage("No active text editor.");
@@ -53,7 +51,7 @@ export class Commands implements vscode.Disposable {
         }
         const selection = editor.selection;
         if (!selection.isEmpty) {
-            await this.runText(selection);
+            await this.runText(editor.document.getText(selection));
             return;
         }
         // Selection is empty. Run the line the cursor is on:
@@ -61,14 +59,19 @@ export class Commands implements vscode.Disposable {
         const document = editor.document;
         const line = document.lineAt(cursorPos);
 
-        await this.runText(line.range);
-    }
-    public async runText(textRange: vscode.Range): Promise<void> {
-        const editor = vscode.window.activeTextEditor;
-        const text = editor.document.getText(textRange);
+        await this.runText(editor.document.getText(line.range));
+        await vscode.commands.executeCommand('cursorMove', { to: 'down', value: 1 });
+        await vscode.commands.executeCommand('cursorMove', { to: 'wrappedLineFirstNonWhitespaceCharacter' });
 
-        this.terminal.sendText(text);
-            
+
+    }
+    public async runText(code: string): Promise<void> {
+        const editor = vscode.window.activeTextEditor;
+        this.terminal = await this.chooseTerminal();
+
+        const preserveFocus = this.config.get<boolean>("preserveFocus", true);
+        this.terminal.show(preserveFocus);
+        this.terminal.sendText(code);
     }
 
     constructor() {

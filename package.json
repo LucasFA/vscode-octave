@@ -23,6 +23,7 @@
 	"activationEvents": [
 		"onLanguage:Octave",
 		"onCommand:octave.run",
+		"onCommand:octave.runLines",
 		"onCommand:octave.stop"
 	],
 	"main": "./out/extension",
