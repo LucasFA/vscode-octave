@@ -1,21 +1,8 @@
-# Octave Language README
+# Octave 
 
-The Visual Studio Code extenstion for Octave Language support.
+This is a fork of leafvmaple's Octave extension, [also available in GitHub]<https://github.com/leafvmaple/vscode-octave>
+
+Given that it is no longer supported, I modified the workflow and made some quality of life adjustments.
 
 ## Release Notes
-
-### Version 0.1.1
-
-* Add snippets.
-
-* Fixed the bug of run code.
-
-### Version 0.1.0
-
-* Support `Run Octave Code` in the vscode.
-
-### Version 0.0.1
-
-* Create the `tmLanguage`.
-
------------------------------------------------------------------------------------------------------------
+ See CHANGELOG.md

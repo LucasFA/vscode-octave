@@ -43,15 +43,33 @@ export class Commands implements vscode.Disposable {
         return new Promise((resolve) => setTimeout(resolve, ms));
     }
     
-    public async runLines() {
-        vscode.window.showInformationMessage("Running lines is not yet implemented.")
-        // await this.runLinesInTerm();
+    public async runLines(): Promise<void> {
+        vscode.window.showInformationMessage("Running lines is not yet implemented.");
+
+        const editor = vscode.window.activeTextEditor;
+        if (!editor) {
+            vscode.window.showErrorMessage("No active text editor.");
+            return;
+        }
+        const selection = editor.selection;
+        if (!selection.isEmpty) {
+            await this.runText(selection);
+            return;
+        }
+        // Selection is empty. Run the line the cursor is on:
+        const cursorPos = selection.active;
+        const document = editor.document;
+        const line = document.lineAt(cursorPos);
+
+        await this.runText(line.range);
     }
-    // private async runLinesInTerm() {
-    //     document = vscode.window.activeTextEditor.document;
-    //     const { start, end } = vscode.window.activeTextEditor.selection;
-        
-    // }
+    public async runText(textRange: vscode.Range): Promise<void> {
+        const editor = vscode.window.activeTextEditor;
+        const text = editor.document.getText(textRange);
+
+        this.terminal.sendText(text);
+            
+    }
 
     constructor() {
         this.config = vscode.workspace.getConfiguration(this.EXTENSION_NAME);
