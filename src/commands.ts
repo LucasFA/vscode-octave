@@ -16,7 +16,7 @@ export class Commands implements vscode.Disposable {
     private isRunning: boolean;
     private process;
 
-    terminalSetup() {
+    private async terminalSetup() {
         if (vscode.window.activeTerminal.name === this.LANGUAGE_NAME) {
             this.terminal = vscode.window.activeTerminal;
         }
@@ -27,10 +27,10 @@ export class Commands implements vscode.Disposable {
     }
     constructor() {
         this.config = vscode.workspace.getConfiguration(this.EXTENSION_NAME);
-        if (this.config.get("createOutputChannel", true)) {
+        const createOutputChannel = this.config.get<boolean>("createOutputChannel", true);
+        if (createOutputChannel) {
             this.outputChannel = vscode.window.createOutputChannel(this.LANGUAGE_NAME);
         }
-        this.terminalSetup();
     }
 
     public async executeCommand(fileUri: vscode.Uri) {
@@ -57,6 +57,7 @@ export class Commands implements vscode.Disposable {
         const clearPreviousOutput = this.config.get<boolean>("clearPreviousOutput", true);
         const preserveFocus = this.config.get<boolean>("preserveFocus", true);
         if (runInTerminal) {
+            await this.terminalSetup();
             this.executeCommandInTerminal(fileName, clearPreviousOutput, preserveFocus);
         } else {
             this.executeCommandInOutputChannel(fileName, clearPreviousOutput, preserveFocus);
@@ -64,7 +65,6 @@ export class Commands implements vscode.Disposable {
     }
 
     public executeCommandInTerminal(fileName: string, clearPreviousOutput, preserveFocus): void {
-        this.terminalSetup()
         if (clearPreviousOutput) {
             vscode.commands.executeCommand("workbench.action.terminal.clear");
         }
