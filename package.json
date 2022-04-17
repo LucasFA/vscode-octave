@@ -11,12 +11,17 @@
     "categories": [
         "Programming Languages"
     ],
+    "keywords": [
+        "Octave",
+        "Octave Language"
+    ],
     "license": "MIT",
     "repository": {
         "type": "git",
         "url": "https://github.com/leafvmaple/vscode-octave"
     },
     "activationEvents": [
+        "onLanguage:Octave",
         "onCommand:octave.run",
         "onCommand:octave.stop"
     ],
@@ -29,8 +34,26 @@
                 "icon": "images/icon.png"
             },
             {
+                "command": "octave.runLines",
+                "title": "Octave: Run Selection or line"
+            },
+            {
                 "command": "octave.stop",
                 "title": "Octave: Stop Running"
+            }
+        ],
+        "keybindings": [
+            {
+                "command": "octave.run",
+                "key": "ctrl+shift+enter",
+                "mac": "cmd+shift+enter",
+                "when": "editorTextFocus && editorLangId == 'octave'"
+            },
+            {
+                "command": "octave.runLines",
+                "key": "ctrl+enter",
+                "mac": "cmd+enter",
+                "when": "editorTextFocus && editorLangId == 'octave'"
             }
         ],
         "menus": {

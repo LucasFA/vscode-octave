@@ -42,6 +42,16 @@ export class Commands implements vscode.Disposable {
     private async delay(ms: number) {
         return new Promise((resolve) => setTimeout(resolve, ms));
     }
+    
+    public async runLines() {
+        vscode.window.showInformationMessage("Running lines is not yet implemented.")
+        // await this.runLinesInTerm();
+    }
+    // private async runLinesInTerm() {
+    //     document = vscode.window.activeTextEditor.document;
+    //     const { start, end } = vscode.window.activeTextEditor.selection;
+        
+    // }
 
     constructor() {
         this.config = vscode.workspace.getConfiguration(this.EXTENSION_NAME);
