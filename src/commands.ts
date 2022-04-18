@@ -55,12 +55,19 @@ export class Commands implements vscode.Disposable {
             return;
         }
         // Selection is empty. Run the line the cursor is on:
-        const cursorPos = selection.active;
         const document = editor.document;
-        const line = document.lineAt(cursorPos);
 
-        await this.runText(editor.document.getText(line.range));
-        await vscode.commands.executeCommand('cursorMove', { to: 'down', value: 1 });
+        let textToRun: string;
+        let linesToMoveDown = 0;
+        do {
+            let cursorPos = selection.active.translate(linesToMoveDown, 0);
+            linesToMoveDown++;
+            let line = document.lineAt(cursorPos);
+            textToRun = document.getText(line.range);
+        } while (textToRun.length == 0)
+        
+        await this.runText(textToRun);
+        await vscode.commands.executeCommand('cursorMove', { to: 'down', value: linesToMoveDown });
         await vscode.commands.executeCommand('cursorMove', { to: 'wrappedLineFirstNonWhitespaceCharacter' });
 
 
