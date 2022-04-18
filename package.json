@@ -1,5 +1,5 @@
 {
-	"name": "octave",
+	"name": "octaveexecution",
 	"displayName": "Octave Execution",
 	"description": "Octave Language execution and keybinding support for VSCode.",
 	"version": "0.2.0",
@@ -15,7 +15,7 @@
 		"Octave",
 		"Octave Language"
 	],
-	"license": "MIT",
+	"license": "See license in LICENSE",
 	"repository": {
 		"type": "git",
 		"url": "https://github.com/LucasFA/vscode-octave"
