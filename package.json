@@ -1,7 +1,7 @@
 {
 	"name": "octave",
-	"displayName": "Octave Language",
-	"description": "Octave Language support for Visual Studio Code.",
+	"displayName": "Octave Execution",
+	"description": "Octave Language execution and keybinding support for VSCode.",
 	"version": "0.2.0",
 	"icon": "images/icon.png",
 	"publisher": "LucasFA",
@@ -143,11 +143,5 @@
 		"@types/node": "^7.0.43",
 		"@types/vscode": "^1.66.0",
 		"typescript": "^4.6.3"
-	},
-	"__metadata": {
-		"id": "65477c3e-4bcf-4d3f-a800-cfd64ab499db",
-		"publisherDisplayName": "leafvmaple",
-		"publisherId": "2fcf7670-13c2-46e9-965f-1d5b545ad8fa",
-		"isPreReleaseVersion": false
 	}
 }

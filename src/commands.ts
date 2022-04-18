@@ -1,6 +1,5 @@
 "use strict";
 import { basename, dirname } from "path";
-import { print } from "util";
 import * as vscode from "vscode";
 
 export class Commands implements vscode.Disposable {
