@@ -143,5 +143,11 @@
 		"@types/node": "^7.0.43",
 		"@types/vscode": "^1.66.0",
 		"typescript": "^4.6.3"
+	},
+	"__metadata": {
+		"id": "c96fdc1f-a4c7-4ad2-a38d-986716a01f83",
+		"publisherDisplayName": "LucasFA",
+		"publisherId": "efc845ed-5541-42be-a7c4-c1430c45bbec",
+		"isPreReleaseVersion": false
 	}
 }
