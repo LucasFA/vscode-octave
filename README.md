@@ -8,8 +8,8 @@ This extension keeps the Octave terminal open so you can mess around after execu
 This are the defaults. You can modify them.
 | Command           | Keybind                | Comment              |
 |-------------------|------------------------|----------------------|
-| `octave.run`      | `Ctrl + Enter`         | Run current document |
-| `octave.runLines` | `Ctrl + Shift + Enter` | Run current line     |
+| `octave.run`      | `Ctrl + Shift + Enter` | Run current document |
+| `octave.runLines` | `Ctrl + Enter`         | Run current line     |
 
 
 ## Release Notes
