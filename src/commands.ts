@@ -65,12 +65,12 @@ export class Commands implements vscode.Disposable {
             textToRun = document.getText(line.range);
         } while (textToRun.length == 0)
         
-        await this.runText(textToRun);
+        this.runText(textToRun);
         await vscode.commands.executeCommand('cursorMove', { to: 'down', value: linesToMoveDown });
         await vscode.commands.executeCommand('cursorMove', { to: 'wrappedLineFirstNonWhitespaceCharacter' });
 
-
     }
+
     public async runText(code: string): Promise<void> {
         const editor = vscode.window.activeTextEditor;
         this.terminal = await this.chooseTerminal();
@@ -125,7 +125,7 @@ export class Commands implements vscode.Disposable {
         }
         this.terminal.show(preserveFocus);
         this.terminal.sendText(`cd \"${this.cwd.split("\\").join("/")}\"`);
-        this.terminal.sendText(fileName.replace(".m", ""));
+        this.terminal.sendText(`run "${fileName.replace(".m", "")}"`);
     }
 
     public executeCommandInOutputChannel(fileName: string, clearPreviousOutput, preserveFocus): void {
