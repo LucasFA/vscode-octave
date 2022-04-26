@@ -2,10 +2,10 @@
     "function": {
         "prefix": "function",
         "body": [
-            "function $1 = $2($3)",
-            "$4",
-            "end"
+            "function ${1:y} = ${2:f}(${3:x})",
+            "\t${4:body}",
+            "endfunction"
         ],
-        "description":"Function"
+        "description":"Function declaration"
     }
 }
