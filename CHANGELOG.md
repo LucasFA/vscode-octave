@@ -1,5 +1,11 @@
 # Octave Change Log
 
+## [0.2.3] 2022-05-01
+
+* EOF: Now running the current line when on the last line of the document will generate a new line.
+
+* Bugfix: Now running an empty line doesn't result in an unresolved promise by timeout (previously was left in an infinite loop)
+
 ## [0.2.2] 2022-04-27
 * Snippets: added snippets for if statements and while and for loops
 ## [0.2.1] 2022-04-21
