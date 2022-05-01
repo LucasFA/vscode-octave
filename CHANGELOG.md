@@ -1,4 +1,7 @@
 # Octave Change Log
+
+## [0.2.2] 2022-04-27
+* Snippets: added snippets for if statements and while and for loops
 ## [0.2.1] 2022-04-21
 
 * Bugfix: now you can run filenames with spaces
