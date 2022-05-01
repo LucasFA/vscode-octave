@@ -44,38 +44,46 @@ export class Commands implements vscode.Disposable {
     
     public async runLines(): Promise<void> {
         const editor = vscode.window.activeTextEditor;
+        let code: string;
         if (!editor) {
             vscode.window.showErrorMessage("No active text editor.");
             return;
         }
-        const selection = editor.selection;
-        if (!selection.isEmpty) {
-            await this.runText(editor.document.getText(selection));
-            return;
-        }
-        // Selection is empty. Run the line the cursor is on:
-        const document = editor.document;
 
-        let textToRun: string;
+        const document = editor.document;
+        const selection = editor.selection;
+
+        if (selection.end.line + 1 === document.lineCount) {
+            const endPos = document.lineAt(document.lineCount - 1).range.end;
+            await editor.edit(e => e.insert(endPos, '\n'));
+        }
+
         let linesToMoveDown = 0;
-        do {
-            let cursorPos = selection.active.translate(linesToMoveDown, 0);
-            linesToMoveDown++;
-            let line = document.lineAt(cursorPos);
-            textToRun = document.getText(line.range);
-        } while (textToRun.length == 0)
-        
-        this.runText(textToRun);
+        if (!selection.isEmpty) {
+            const codeRange = new vscode.Range(selection.start, selection.end);
+            code = document.getText(codeRange);
+        }
+        else {
+            let line: vscode.TextLine;
+            do {
+                const currentPos = selection.active.translate(linesToMoveDown, 0);
+                linesToMoveDown++;
+                line = document.lineAt(currentPos);
+            } while (line.isEmptyOrWhitespace && line.lineNumber + 1 < document.lineCount);
+            code = line.text;
+        }
+        await this.runText(code);
+
         await vscode.commands.executeCommand('cursorMove', { to: 'down', value: linesToMoveDown });
         await vscode.commands.executeCommand('cursorMove', { to: 'wrappedLineFirstNonWhitespaceCharacter' });
 
     }
 
-    public async runText(code: string): Promise<void> {
-        const editor = vscode.window.activeTextEditor;
+    private async runText(code: string): Promise<void> {
         this.terminal = await this.chooseTerminal();
 
         const preserveFocus = this.config.get<boolean>("preserveFocus", true);
+        // TODO: figure out whether to get the config at startup (current) or when 20220/05/01
         this.terminal.show(preserveFocus);
         this.terminal.sendText(code);
     }
@@ -124,6 +132,7 @@ export class Commands implements vscode.Disposable {
             vscode.commands.executeCommand("workbench.action.terminal.clear");
         }
         this.terminal.show(preserveFocus);
+        // TODO: deal with encoding. Path names with tildes and such have problems
         this.terminal.sendText(`cd \"${this.cwd.split("\\").join("/")}\"`);
         this.terminal.sendText(`run "${fileName.replace(".m", "")}"`);
     }
