@@ -9,12 +9,14 @@ export class Commands implements vscode.Disposable {
 
     private outputChannel: vscode.OutputChannel;
     private terminal: vscode.Terminal;
-    private config: vscode.WorkspaceConfiguration;
     private document: vscode.TextDocument;
     private cwd: string;
     private isRunning: boolean;
     private process;
 
+    private config() {
+        return vscode.workspace.getConfiguration(this.EXTENSION_NAME);
+    }
     private async chooseTerminal(): Promise<vscode.Terminal> {
 
         if (vscode.window.terminals.length > 0) {
@@ -82,15 +84,13 @@ export class Commands implements vscode.Disposable {
     private async runText(code: string): Promise<void> {
         this.terminal = await this.chooseTerminal();
 
-        const preserveFocus = this.config.get<boolean>("preserveFocus", true);
-        // TODO: figure out whether to get the config at startup (current) or when 20220/05/01
+        const preserveFocus = this.config().get<boolean>("preserveFocus", true);
         this.terminal.show(preserveFocus);
         this.terminal.sendText(code);
     }
 
     constructor() {
-        this.config = vscode.workspace.getConfiguration(this.EXTENSION_NAME);
-        const createOutputChannel = this.config.get<boolean>("createOutputChannel", true);
+        const createOutputChannel = this.config().get<boolean>("createOutputChannel", true);
         if (createOutputChannel) {
             this.outputChannel = vscode.window.createOutputChannel(this.LANGUAGE_NAME);
         }
@@ -115,10 +115,10 @@ export class Commands implements vscode.Disposable {
         const fileName = basename(this.document.fileName);
         this.cwd = dirname(this.document.fileName);
 
-        this.config = vscode.workspace.getConfiguration(this.EXTENSION_NAME);
-        const runInTerminal = this.config.get<boolean>("runInTerminal", true);
-        const clearPreviousOutput = this.config.get<boolean>("clearPreviousOutput", true);
-        const preserveFocus = this.config.get<boolean>("preserveFocus", true);
+        const config = this.config();
+        const runInTerminal = config.get<boolean>("runInTerminal", true);
+        const clearPreviousOutput = config.get<boolean>("clearPreviousOutput", true);
+        const preserveFocus = config.get<boolean>("preserveFocus", true);
         if (runInTerminal) {
             this.terminal = await this.chooseTerminal();
             this.executeCommandInTerminal(fileName, clearPreviousOutput, preserveFocus);

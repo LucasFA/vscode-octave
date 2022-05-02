@@ -1,5 +1,7 @@
 # Octave Change Log
 
+* Improvement: Configuration is now gotten live everytime it is needed.
+
 ## [0.2.3] 2022-05-01
 
 * EOF: Now running the current line when on the last line of the document will generate a new line.
