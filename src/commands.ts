@@ -96,7 +96,7 @@ export class Commands implements vscode.Disposable {
         }
     }
 
-    public async executeCommand(fileUri: vscode.Uri) {
+    public async executeFile(fileUri: vscode.Uri) {
         if (this.isRunning) {
             vscode.window.showInformationMessage("Code is already running!");
             return;
@@ -121,13 +121,13 @@ export class Commands implements vscode.Disposable {
         const preserveFocus = config.get<boolean>("preserveFocus", true);
         if (runInTerminal) {
             this.terminal = await this.chooseTerminal();
-            this.executeCommandInTerminal(fileName, clearPreviousOutput, preserveFocus);
+            this.executeFileInTerminal(fileName, clearPreviousOutput, preserveFocus);
         } else {
-            this.executeCommandInOutputChannel(fileName, clearPreviousOutput, preserveFocus);
+            this.executeFileInOutputChannel(fileName, clearPreviousOutput, preserveFocus);
         }
     }
 
-    public executeCommandInTerminal(fileName: string, clearPreviousOutput, preserveFocus): void {
+    public executeFileInTerminal(fileName: string, clearPreviousOutput, preserveFocus): void {
         if (clearPreviousOutput) {
             vscode.commands.executeCommand("workbench.action.terminal.clear");
         }
@@ -137,7 +137,7 @@ export class Commands implements vscode.Disposable {
         this.terminal.sendText(`run "${fileName.replace(".m", "")}"`);
     }
 
-    public executeCommandInOutputChannel(fileName: string, clearPreviousOutput, preserveFocus): void {
+    public executeFileInOutputChannel(fileName: string, clearPreviousOutput, preserveFocus): void {
         if (clearPreviousOutput) {
             this.outputChannel.clear();
         }

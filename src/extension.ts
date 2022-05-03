@@ -7,7 +7,7 @@ const commands = new Commands();
 export function activate(context: vscode.ExtensionContext) {
 
     const run = vscode.commands.registerCommand("octave.run", (fileUri: vscode.Uri) => {
-        commands.executeCommand(fileUri);
+        commands.executeFile(fileUri);
     });
     
     const runLines = vscode.commands.registerCommand("octave.runLines", () => {
