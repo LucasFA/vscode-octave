@@ -1,5 +1,7 @@
 # Octave Change Log
 
+## [0.2.4] 2022-05-07
+
 * Improvement: Configuration is now gotten live everytime it is needed.
 
 ## [0.2.3] 2022-05-01
