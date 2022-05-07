@@ -2,7 +2,7 @@
 	"name": "octaveexecution",
 	"displayName": "Octave Execution",
 	"description": "Octave Language execution and keybinding support for VSCode.",
-	"version": "0.2.3",
+	"version": "0.2.4",
 	"icon": "images/icon.png",
 	"publisher": "LucasFA",
 	"engines": {
