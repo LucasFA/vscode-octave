@@ -36,14 +36,14 @@ export class Commands implements vscode.Disposable {
         let term = vscode.window.createTerminal(this.LANGUAGE_NAME);
         term.sendText(this.LANGUAGE_NAME);
         await this.delay(800); // let Octave warm up
-        
+
         return term;
     }
 
     private async delay(ms: number) {
         return new Promise((resolve) => setTimeout(resolve, ms));
     }
-    
+
     public async runLines(): Promise<void> {
         const editor = vscode.window.activeTextEditor;
         let code: string;
