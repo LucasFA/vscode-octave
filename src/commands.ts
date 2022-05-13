@@ -174,6 +174,7 @@ export class Commands implements vscode.Disposable {
     }
 
     public dispose() {
+        this.terminal.dispose();
         this.stopCommand();
     }
 }
