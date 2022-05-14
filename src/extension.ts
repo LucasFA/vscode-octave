@@ -21,6 +21,7 @@ export function activate(context: vscode.ExtensionContext) {
     context.subscriptions.push(run);
     context.subscriptions.push(runLines);
     context.subscriptions.push(commands);
+    context.subscriptions.push(stop)
 }
 
 export function deactivate() {
