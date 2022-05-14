@@ -1,6 +1,7 @@
 "use strict";
 import { basename, dirname } from "path";
 import * as vscode from "vscode";
+import * as util from "./util"
 
 export class Commands implements vscode.Disposable {
     private LANGUAGE_NAME = "Octave";
@@ -13,36 +14,6 @@ export class Commands implements vscode.Disposable {
     private cwd: string;
     private isRunning: boolean;
     private process;
-
-    private config() {
-        return vscode.workspace.getConfiguration(this.EXTENSION_NAME);
-    }
-    private async chooseTerminal(): Promise<vscode.Terminal> {
-
-        if (vscode.window.terminals.length > 0) {
-            const activeTerminal = vscode.window.activeTerminal;
-            if (activeTerminal !== undefined && activeTerminal.name === this.LANGUAGE_NAME) {
-                return activeTerminal;
-            }
-
-            for (let i = vscode.window.terminals.length - 1; i >= 0; i--) {
-                const terminal = vscode.window.terminals[i];
-                if (terminal.name === this.LANGUAGE_NAME) {
-                    terminal.show(true);
-                    return terminal;
-                }
-            }
-        }
-        let term = vscode.window.createTerminal(this.LANGUAGE_NAME);
-        term.sendText(this.LANGUAGE_NAME);
-        await this.delay(800); // let Octave warm up
-
-        return term;
-    }
-
-    private async delay(ms: number) {
-        return new Promise((resolve) => setTimeout(resolve, ms));
-    }
 
     public async runLines(): Promise<void> {
         const editor = vscode.window.activeTextEditor;
@@ -82,15 +53,15 @@ export class Commands implements vscode.Disposable {
     }
 
     private async runText(code: string): Promise<void> {
-        this.terminal = await this.chooseTerminal();
+        this.terminal = await util.setupTerminal(this.EXTENSION_NAME);
 
-        const preserveFocus = this.config().get<boolean>("preserveFocus", true);
+        const preserveFocus = util.config().get<boolean>("preserveFocus", true);
         this.terminal.show(preserveFocus);
         this.terminal.sendText(code);
     }
 
     constructor() {
-        const createOutputChannel = this.config().get<boolean>("createOutputChannel", true);
+        const createOutputChannel = util.config().get<boolean>("createOutputChannel", true);
         if (createOutputChannel) {
             this.outputChannel = vscode.window.createOutputChannel(this.LANGUAGE_NAME);
         }
@@ -115,12 +86,12 @@ export class Commands implements vscode.Disposable {
         const fileName = basename(this.document.fileName);
         this.cwd = dirname(this.document.fileName);
 
-        const config = this.config();
+        const config = util.config();
         const runInTerminal = config.get<boolean>("runInTerminal", true);
         const clearPreviousOutput = config.get<boolean>("clearPreviousOutput", true);
         const preserveFocus = config.get<boolean>("preserveFocus", true);
         if (runInTerminal) {
-            this.terminal = await this.chooseTerminal();
+            this.terminal = await util.setupTerminal(this.EXTENSION_NAME);
             this.executeFileInTerminal(fileName, clearPreviousOutput, preserveFocus);
         } else {
             this.executeFileInOutputChannel(fileName, clearPreviousOutput, preserveFocus);
