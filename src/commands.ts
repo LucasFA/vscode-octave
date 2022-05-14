@@ -82,6 +82,10 @@ export class Commands implements vscode.Disposable {
             vscode.window.showInformationMessage("No code found or selected.");
             return;
         }
+        const isSaved = await util.saveDocument(this.document);
+        if (!isSaved) {
+            return;
+        }
 
         const fileName = basename(this.document.fileName);
         this.cwd = dirname(this.document.fileName);

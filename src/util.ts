@@ -31,3 +31,18 @@ export async function setupTerminal(requiredName: string): Promise<vscode.Termin
 export async function delay(ms: number) {
     return new Promise((resolve) => setTimeout(resolve, ms));
 }
+
+export async function saveDocument(document: vscode.TextDocument): Promise<boolean> {
+    if (document.isUntitled) {
+        void vscode.window.showErrorMessage('Document is unsaved. Please save and retry.');
+        return false;
+    }
+
+    const isSaved: boolean = document.isDirty ? (await document.save()) : true;
+    if (!isSaved) {
+        void vscode.window.showErrorMessage('Cannot run command. Document could not be saved.');
+        return false;
+    }
+
+    return true;
+}
