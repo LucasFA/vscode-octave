@@ -15,6 +15,13 @@ export class Commands implements vscode.Disposable {
     private isRunning: boolean;
     private process;
 
+    constructor() {
+        const createOutputChannel = util.config().get<boolean>("createOutputChannel", true);
+        if (createOutputChannel) {
+            this.outputChannel = vscode.window.createOutputChannel(this.LANGUAGE_NAME);
+        }
+    }
+
     public async runLines(): Promise<void> {
         const editor = vscode.window.activeTextEditor;
         let code: string;
@@ -58,13 +65,6 @@ export class Commands implements vscode.Disposable {
         const preserveFocus = util.config().get<boolean>("preserveFocus", true);
         this.terminal.show(preserveFocus);
         this.terminal.sendText(code);
-    }
-
-    constructor() {
-        const createOutputChannel = util.config().get<boolean>("createOutputChannel", true);
-        if (createOutputChannel) {
-            this.outputChannel = vscode.window.createOutputChannel(this.LANGUAGE_NAME);
-        }
     }
 
     public async executeFile(fileUri: vscode.Uri) {
