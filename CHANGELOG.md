@@ -1,4 +1,9 @@
 # Octave Change Log
+
+## [0.2.6] 2022-05-14
+
+* Bugfix/improvement: documents are now saved before being executed. Solves running outdated file when not manually saved.
+
 ## [0.2.5] 2022-05-13
 
 * Improvement: dispose of terminal on close.
