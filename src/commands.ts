@@ -104,8 +104,8 @@ export class Commands implements vscode.Disposable {
         }
         this.terminal.show(preserveFocus);
         // TODO: deal with encoding. Path names with tildes and such have problems
-        this.terminal.sendText(`cd \"${this.cwd.split("\\").join("/")}\"`);
-        this.terminal.sendText(`run "${fileName.replace(".m", "")}"`);
+        this.terminal.sendText(`cd "${this.cwd.split("\\").join("/")}"`);
+        this.terminal.sendText(`run "${fileName}"`);
     }
 
     public executeFileInOutputChannel(fileName: string, clearPreviousOutput, preserveFocus): void {
