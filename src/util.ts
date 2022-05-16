@@ -1,11 +1,12 @@
 "use strict";
 import * as vscode from "vscode";
+import * as globals from "./globals"
 
 export function config() {
-    return vscode.workspace.getConfiguration("octave");
+    return vscode.workspace.getConfiguration(globals.EXTENSION_NAME);
 }
 
-export async function setupTerminal(requiredName: string): Promise<vscode.Terminal> {
+export async function setupTerminal(requiredName: string = globals.LANGUAGE_NAME): Promise<vscode.Terminal> {
     if (vscode.window.terminals.length > 0) {
         const activeTerminal = vscode.window.activeTerminal;
         if (activeTerminal !== undefined && activeTerminal.name === requiredName) {

@@ -1,13 +1,10 @@
 "use strict";
 import { basename, dirname } from "path";
 import * as vscode from "vscode";
-import * as util from "./util"
+import * as util from "./util";
+import * as globals from "./globals";
 
 export class Commands implements vscode.Disposable {
-    private LANGUAGE_NAME = "Octave";
-    private EXTENSION_NAME = "octave";
-    private COMMANDS = "octave ";
-
     private outputChannel: vscode.OutputChannel;
     private terminal: vscode.Terminal;
     private document: vscode.TextDocument;
@@ -18,7 +15,7 @@ export class Commands implements vscode.Disposable {
     constructor() {
         const createOutputChannel = util.config().get<boolean>("createOutputChannel", true);
         if (createOutputChannel) {
-            this.outputChannel = vscode.window.createOutputChannel(this.LANGUAGE_NAME);
+            this.outputChannel = vscode.window.createOutputChannel(globals.LANGUAGE_NAME);
         }
     }
 
@@ -60,8 +57,7 @@ export class Commands implements vscode.Disposable {
     }
 
     private async runText(code: string): Promise<void> {
-        this.terminal = await util.setupTerminal(this.EXTENSION_NAME);
-
+        this.terminal = await util.setupTerminal();
         const preserveFocus = util.config().get<boolean>("preserveFocus", true);
         this.terminal.show(preserveFocus);
         this.terminal.sendText(code);
@@ -95,7 +91,7 @@ export class Commands implements vscode.Disposable {
         const clearPreviousOutput = config.get<boolean>("clearPreviousOutput", true);
         const preserveFocus = config.get<boolean>("preserveFocus", true);
         if (runInTerminal) {
-            this.terminal = await util.setupTerminal(this.EXTENSION_NAME);
+            this.terminal = await util.setupTerminal();
             this.executeFileInTerminal(fileName, clearPreviousOutput, preserveFocus);
         } else {
             this.executeFileInOutputChannel(fileName, clearPreviousOutput, preserveFocus);
@@ -121,7 +117,7 @@ export class Commands implements vscode.Disposable {
         this.outputChannel.appendLine(`[Running] ${basename(fileName)}`);
         const exec = require("child_process").exec;
         const startTime = new Date();
-        this.process = exec(this.COMMANDS + fileName, { cwd: this.cwd });
+        this.process = exec(globals.COMMANDS + fileName, { cwd: this.cwd });
 
         this.process.stdout.on("data", (data) => {
             this.outputChannel.append(data);
