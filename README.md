@@ -12,5 +12,14 @@ This are the defaults. You can modify them.
 | `octave.runLines` | `Ctrl + Enter`         | Run current line     |
 
 
+## Setup Guide
+
+### Windows
+
+1. Install Octave. Take note of the installation directory. For example, in `C:\Octave\Octave-7.1.0\`
+2. Add `C:\Octave\Octave-7.1.0\mingw64\bin` (that is, add to the Octave installation path you noted before `\mingw64\bin` to the end) to your system's PATH environment variable.
+3. Install the extension.
+
+
 ## Release Notes
  See [CHANGELOG.md](https://github.com/LucasFA/vscode-octave/blob/master/CHANGELOG.md)
