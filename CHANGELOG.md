@@ -1,5 +1,10 @@
 # Octave Change Log
 
+## [0.2.7] 2022-05-27
+
+* Minor: apostrophes are now not automatically closed.
+
+* Updated Readme with installation instructions.
 ## [0.2.6] 2022-05-14
 
 * Bugfix/improvement: documents are now saved before being executed. Solves running outdated file when not manually saved.
