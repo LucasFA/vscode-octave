@@ -93,12 +93,6 @@
 					"default": true,
 					"description": "Whether to preserve focus on code editor after code run is triggered.",
 					"scope": "resource"
-				},
-				"octave.createOutputTerminal": {
-					"type": "boolean",
-					"default": true,
-					"description": "Whether to create an output terminal on startup",
-					"scope": "resource"
 				}
 			}
 		},
