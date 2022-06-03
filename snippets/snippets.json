@@ -12,8 +12,9 @@
         "prefix": "for",
         "body": [
             "for ${1:i} = ${2:range}",
-            "\t${3:body}",
-            "endfor"
+            "\t$3",
+            "endfor",
+            "$0"
         ],
         "description": "'For' loop"
     },
@@ -21,8 +22,9 @@
         "prefix": "while",
         "body": [
             "while ${1:condition}",
-            "\t${2:body}",
-            "endwhile"
+            "\t$2",
+            "endwhile",
+            "$0"
         ],
         "description": "'While' loop"
     },
@@ -31,7 +33,8 @@
         "body": [
             "if ${1:condition}",
             "\t${2:body}",
-            "endif"
+            "endif",
+            "$0"
         ],
         "description": "If conditional"
     }
