@@ -1,16 +1,20 @@
+This is a fork of leafvmaple's Octave Language extension, [also available in GitHub](https://github.com/leafvmaple/vscode-octave).
+This extension pretends to make some quality of life adjusments to it.
+
 # Features
 
-This is a fork of leafvmaple's Octave Language extension, [also available in GitHub](https://github.com/leafvmaple/vscode-octave), which is no longer being supported.
-
-This extension keeps the Octave terminal open so you can mess around after executing a script. 
+- Keeps the Octave terminal open so you can mess around after executing a script. 
+- Add keybinds for easy execution.
+- Adds a few snippets.
 
 ## Keybinds
 This are the defaults. You can modify them.
-| Command           | Keybind                | Comment              |
-|-------------------|------------------------|----------------------|
-| `octave.run`      | `Ctrl + Shift + Enter` | Run current document |
-| `octave.runLines` | `Ctrl + Enter`         | Run current line     |
+| Command           | Keybind                | Comment                          |
+|-------------------|------------------------|----------------------------------|
+| `octave.run`      | `Ctrl + Shift + Enter` | Run current document             |
+| `octave.runLines` | `Ctrl + Enter`         | Run current line on the terminal |
 
+Running the current document might run it on the terminal or on an output channel depending on the setting `octave.runInTerminal`
 
 ## Setup Guide
 
