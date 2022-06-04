@@ -1,5 +1,13 @@
 # Octave Change Log
 
+## [0.3.0] 2022-06-04
+
+* Added indentation rules!
+
+* Removed createOuputTerminal as it had no effect. It will create it regardless if you set `octave.runInTerminal` to `false`
+
+* Modified snippets
+
 ## [0.2.7] 2022-05-27
 
 * Minor: apostrophes are now not automatically closed.
