@@ -13,10 +13,7 @@ export class Commands implements vscode.Disposable {
     private process;
 
     constructor() {
-        const createOutputChannel = util.config().get<boolean>("createOutputChannel", true);
-        if (createOutputChannel) {
-            this.outputChannel = vscode.window.createOutputChannel(globals.LANGUAGE_NAME);
-        }
+        this.outputChannel = vscode.window.createOutputChannel(globals.LANGUAGE_NAME);
     }
 
     public async runLines(): Promise<void> {
