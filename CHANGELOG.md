@@ -1,4 +1,4 @@
-# Octave Change Log
+# Change Log
 
 ## [0.3.0] 2022-06-04
 
@@ -13,6 +13,7 @@
 * Minor: apostrophes are now not automatically closed.
 
 * Updated Readme with installation instructions.
+
 ## [0.2.6] 2022-05-14
 
 * Bugfix/improvement: documents are now saved before being executed. Solves running outdated file when not manually saved.
@@ -20,6 +21,7 @@
 ## [0.2.5] 2022-05-13
 
 * Improvement: dispose of terminal on close.
+
 ## [0.2.4] 2022-05-07
 
 * Improvement: Configuration is now gotten live everytime it is needed.
@@ -32,6 +34,7 @@
 
 ## [0.2.2] 2022-04-27
 * Snippets: added snippets for if statements and while and for loops
+
 ## [0.2.1] 2022-04-21
 
 * Bugfix: now you can run filenames with spaces
