@@ -1,10 +1,13 @@
 # Change Log
 
+## [0.3.1] 2022-06-04
+
+* Hotfix: createOutputChannel properly removed.
 ## [0.3.0] 2022-06-04
 
 * Added indentation rules!
 
-* Removed createOuputTerminal as it had no effect. It will create it regardless if you set `octave.runInTerminal` to `false`
+* Removed createOuputChannel as it had no useful effect. 
 
 * Modified snippets
 
