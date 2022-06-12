@@ -6,6 +6,7 @@
         "lib": [
             "es6"
         ],
+        "alwaysStrict": true,
         "sourceMap": true,
         "rootDir": "src"
     },
