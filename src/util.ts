@@ -24,6 +24,9 @@ export async function setupTerminal(requiredName: string = globals.LANGUAGE_NAME
     }
 
     let term = vscode.window.createTerminal(requiredName);
+    // FIXME: currently still opens octave from the PATH variable. There's differing behaviour depending on the terminal
+    // eg: "C:/.../octave.bat" opens octave on cmd but not on powershell. Bash users might have any experience
+    // const octaveLocation = config().get<string>("octaveLocation", globals.OCTAVE_PATH);
     term.sendText("octave");
     delay(800); // let Octave warm up
     return term;

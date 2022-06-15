@@ -1,8 +1,13 @@
 # Change Log
 
+## [0.3.2] 2022-06-15
+
+* Customization: you can now set the path to your octave executable, instead of relying on having it in the PATH variable.
+
 ## [0.3.1] 2022-06-04
 
 * Hotfix: createOutputChannel properly removed.
+
 ## [0.3.0] 2022-06-04
 
 * Added indentation rules!
