@@ -95,7 +95,7 @@ export class Commands implements vscode.Disposable {
         }
     }
 
-    public executeFileInTerminal(fileName: string, clearPreviousOutput, preserveFocus): void {
+    public executeFileInTerminal(fileName: string, clearPreviousOutput: boolean, preserveFocus: boolean): void {
         if (clearPreviousOutput) {
             vscode.commands.executeCommand("workbench.action.terminal.clear");
         }
@@ -105,7 +105,7 @@ export class Commands implements vscode.Disposable {
         this.terminal.sendText(`run "${fileName}"`);
     }
 
-    public executeFileInOutputChannel(fileName: string, clearPreviousOutput, preserveFocus): void {
+    public executeFileInOutputChannel(fileName: string, clearPreviousOutput: boolean, preserveFocus: boolean): void {
         if (clearPreviousOutput) {
             this.outputChannel.clear();
         }
