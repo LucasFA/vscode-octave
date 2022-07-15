@@ -55,7 +55,7 @@ export class Commands implements vscode.Disposable {
 
     private async runText(code: string): Promise<void> {
         this.terminal = await util.setupTerminal();
-        const preserveFocus = util.config().get<boolean>("preserveFocus");
+        const preserveFocus = util.getConfig<boolean>("preserveFocus");
         this.terminal.show(preserveFocus);
         this.terminal.sendText(code);
     }
@@ -114,7 +114,7 @@ export class Commands implements vscode.Disposable {
         this.outputChannel.appendLine(`[Running] ${basename(fileName)}`);
         const exec = require("child_process").exec;
         const startTime = new Date();
-        const octaveLocation = util.config().get<string>("octaveLocation", globals.OCTAVE_PATH);
+        const octaveLocation = util.getConfig<string>("octaveLocation", globals.OCTAVE_PATH);
         this.process = exec(`"${octaveLocation}" ${fileName}`, { cwd: this.cwd });
 
         this.process.stdout.on("data", (data) => {

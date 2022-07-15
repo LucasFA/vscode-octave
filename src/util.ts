@@ -2,8 +2,23 @@
 import * as vscode from "vscode";
 import * as globals from "./globals"
 
+
+export type ConfigField =
+    "showRunIconInEditorTitleMenu" |
+    "runInTerminal"                |
+    "clearPreviousOutput"          |
+    "preserveFocus"                |
+    "octaveLocation";
+
+// Default values should be specified in package.json
+
+// NOTE: use event system to subscribe to onDidChangeConfiguration
 export function config() {
     return vscode.workspace.getConfiguration(globals.EXTENSION_NAME);
+}
+
+export function getConfig<T>(field: ConfigField, defaultValue?: T): T {
+        config().get<T>(field, defaultValue);
 }
 
 export async function setupTerminal(requiredName: string = globals.LANGUAGE_NAME): Promise<vscode.Terminal> {
