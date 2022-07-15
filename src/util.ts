@@ -18,7 +18,7 @@ export function config() {
 }
 
 export function getConfig<T>(field: ConfigField, defaultValue?: T): T {
-        config().get<T>(field, defaultValue);
+        return config().get<T>(field, defaultValue);
 }
 
 export async function setupTerminal(requiredName: string = globals.LANGUAGE_NAME): Promise<vscode.Terminal> {
