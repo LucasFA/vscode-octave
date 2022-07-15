@@ -55,7 +55,7 @@ export class Commands implements vscode.Disposable {
 
     private async runText(code: string): Promise<void> {
         this.terminal = await util.setupTerminal();
-        const preserveFocus = util.config().get<boolean>("preserveFocus", true);
+        const preserveFocus = util.config().get<boolean>("preserveFocus");
         this.terminal.show(preserveFocus);
         this.terminal.sendText(code);
     }
@@ -84,9 +84,9 @@ export class Commands implements vscode.Disposable {
         this.cwd = dirname(this.document.fileName);
 
         const config = util.config();
-        const runInTerminal = config.get<boolean>("runInTerminal", true);
-        const clearPreviousOutput = config.get<boolean>("clearPreviousOutput", true);
-        const preserveFocus = config.get<boolean>("preserveFocus", true);
+        const runInTerminal = config.get<boolean>("runInTerminal");
+        const clearPreviousOutput = config.get<boolean>("clearPreviousOutput");
+        const preserveFocus = config.get<boolean>("preserveFocus");
         if (runInTerminal) {
             this.terminal = await util.setupTerminal();
             this.executeFileInTerminal(fileName, clearPreviousOutput, preserveFocus);
