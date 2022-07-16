@@ -96,7 +96,6 @@
 				},
 				"octave.octaveLocation": {
 					"type":"string",
-					"default": "octave",
 					"description": "Full path to the octave executable. By default searches the environment PATH variable",
 					"scope": "window"
 				}

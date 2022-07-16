@@ -1,6 +1,8 @@
 "use strict";
 import * as vscode from "vscode";
 import * as globals from "./globals"
+import * as fs from "fs";
+import * as path from 'path';
 
 
 export type ConfigField =
@@ -26,6 +28,27 @@ export function getConfig<T>(field: ConfigField, defaultValue?: T): T {
     }
 }
 
+function getOctavefromEnvPath(platform: string): string | undefined {
+    let fileName = "octave"
+    let splitChar = ':';
+    let fileExtension = '';
+
+    if (platform === 'win32') {
+        fileName += "-cli"
+        splitChar = ';';
+        fileExtension = '.exe';
+    }
+
+    const envPaths: string[] | string = process.env.PATH.split(splitChar);
+    for (const env_path of envPaths) {
+        const octave_path: string = path.join(env_path, fileName + fileExtension);
+        if (fs.existsSync(octave_path)) {
+            return octave_path;
+        }
+    }
+    return undefined;
+}
+
 export async function setupTerminal(requiredName: string = globals.LANGUAGE_NAME): Promise<vscode.Terminal> {
     // Don't create redundant terminals. Use existing Octave terminals if they exist.
     if (vscode.window.terminals.length > 0) {
@@ -43,13 +66,21 @@ export async function setupTerminal(requiredName: string = globals.LANGUAGE_NAME
             }
         }
     }
+    let octavePath = getConfig<string>("octaveLocation")
+    if (!octavePath) {
+        const platform: string = process.platform;
+        octavePath = getOctavefromEnvPath(platform)
+    }
 
-    let term = vscode.window.createTerminal(requiredName);
-    // FIXME: currently still opens octave from the PATH variable. There's differing behaviour depending on the terminal
-    // eg: "C:/.../octave.bat" opens octave on cmd but not on powershell. Bash users might have any experience
-    // const octaveLocation = config().get<string>("octaveLocation", globals.OCTAVE_PATH);
-    term.sendText("octave");
-    delay(800); // let Octave warm up
+    // TODO: add field for shellArgs from user (settings)
+    const terminalOptions: vscode.TerminalOptions = {
+        name: requiredName,
+        shellPath: octavePath,
+        cwd: path.dirname(vscode.workspace.workspaceFolders[0].uri.fsPath)
+
+    }
+
+    const term = vscode.window.createTerminal(terminalOptions);
     return term;
 }
 
