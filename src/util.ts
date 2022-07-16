@@ -18,7 +18,12 @@ export function config() {
 }
 
 export function getConfig<T>(field: ConfigField, defaultValue?: T): T {
+    if (defaultValue) {
         return config().get<T>(field, defaultValue);
+    }
+    else {
+        return config().get<T>(field);
+    }
 }
 
 export async function setupTerminal(requiredName: string = globals.LANGUAGE_NAME): Promise<vscode.Terminal> {
