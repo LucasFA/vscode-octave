@@ -1,8 +1,10 @@
 # Change Log
 
-## [0.3.2] 2022-06-15
+## [0.4.0] 2022-07-16
 
 * Customization: you can now set the path to your octave executable, instead of relying on having it in the PATH variable.
+
+* Improvement: now the octave terminal starts up significantly faster.
 
 ## [0.3.1] 2022-06-04
 
