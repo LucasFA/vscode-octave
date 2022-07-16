@@ -79,7 +79,7 @@ export class Commands implements vscode.Disposable {
             return;
         }
 
-        const fullPath = this.document.fileName;
+        const document = this.document;
 
         const config = util.config();
         const runInTerminal = config.get<boolean>("runInTerminal");
@@ -87,24 +87,30 @@ export class Commands implements vscode.Disposable {
         const preserveFocus = config.get<boolean>("preserveFocus");
         if (runInTerminal) {
             this.terminal = await util.setupTerminal();
-            this.executeFileInTerminal(fullPath, clearPreviousOutput, preserveFocus);
+            this.executeFileInTerminal(document, clearPreviousOutput, preserveFocus);
         } else {
-            this.executeFileInOutputChannel(fullPath, clearPreviousOutput, preserveFocus);
+            this.executeFileInOutputChannel(document.fileName, clearPreviousOutput, preserveFocus);
         }
     }
 
-    public executeFileInTerminal(fullPath: string, clearPreviousOutput: boolean, preserveFocus: boolean): void {
+    public executeFileInTerminal(document: vscode.TextDocument, clearPreviousOutput: boolean, preserveFocus: boolean): void {
         if (clearPreviousOutput) {
             vscode.commands.executeCommand("workbench.action.terminal.clear");
         }
         this.terminal.show(preserveFocus);
-        // TODO: deal with encoding. Path names with tildes and such have problems
 
-        const cwd = dirname(fullPath).split("\\").join("/");
-        this.terminal.sendText(`cd "${cwd}"`);
+        const filePath = document.fileName.split("\\").join("/");
 
-        const fileBaseName = basename(fullPath)
-        this.terminal.sendText(`run "${fileBaseName}"`);
+        // regex for non-ascii characters
+        const regex: RegExp = /[^\x00-\x7F]/g;
+        const isNonAscii = regex.test(filePath);
+        
+        if (isNonAscii) {
+            this.terminal.sendText(`"${document.getText()}"`);
+        }
+        else {
+            this.terminal.sendText(`run "${filePath}"`);
+        }
     }
 
     public executeFileInOutputChannel(fileFullPath: string, clearPreviousOutput: boolean, preserveFocus: boolean): void {
