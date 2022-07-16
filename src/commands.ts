@@ -116,7 +116,7 @@ export class Commands implements vscode.Disposable {
         this.outputChannel.appendLine(`[Running] ${basename(fileFullPath)}`);
         const exec = require("child_process").exec;
         const startTime = new Date();
-        const octaveLocation = util.getConfig<string>("octaveLocation", globals.OCTAVE_PATH);
+        const octaveLocation = util.getConfig<string>("octaveLocation");
         this.process = exec(`"${octaveLocation}" ${basename(fileFullPath)}`, { cwd: dirname(fileFullPath) });
 
         this.process.stdout.on("data", (data) => {
