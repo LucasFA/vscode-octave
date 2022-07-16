@@ -19,13 +19,8 @@ export function config() {
     return vscode.workspace.getConfiguration(globals.EXTENSION_NAME);
 }
 
-export function getConfig<T>(field: ConfigField, defaultValue?: T): T {
-    if (defaultValue) {
-        return config().get<T>(field, defaultValue);
-    }
-    else {
-        return config().get<T>(field);
-    }
+export function getConfig<T>(field: ConfigField, defaultValue?: T): T | undefined {
+    return config().get<T>(field, defaultValue);
 }
 
 function getOctavefromEnvPath(platform: string): string | undefined {
