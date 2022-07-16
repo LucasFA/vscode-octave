@@ -1,5 +1,9 @@
 # Change Log
 
+## [0.5.1] 2022-07-16
+
+* WIP Bugfix: execution of files with paths including tildes or other UTF-8 characters are now dealt with appropiately when executing a file in an output channel (`"octave.runInTerminal": false` in `settings.json` )
+
 ## [0.5.0] 2022-07-16
 
 * Customization: you can now set the path to your octave executable, instead of relying on having it in the PATH variable.
