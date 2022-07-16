@@ -3,6 +3,7 @@
 ## [0.5.2] 2022-07-16
 
 * Bugfix: execution of files with paths including non-ASCII characters are now dealt with appropiately. However, running in terminal will output the contents of the file besides the output of the command, which is bad UX due to all the cluttering.
+
 ## [0.5.1] 2022-07-16
 
 * WIP Bugfix: execution of files with paths including tildes or other UTF-8 characters are now dealt with appropiately when executing a file in an output channel (`"octave.runInTerminal": false` in `settings.json` )
