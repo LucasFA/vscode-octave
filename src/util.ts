@@ -27,6 +27,7 @@ export function getConfig<T>(field: ConfigField, defaultValue?: T): T {
 }
 
 export async function setupTerminal(requiredName: string = globals.LANGUAGE_NAME): Promise<vscode.Terminal> {
+    // Don't create redundant terminals. Use existing Octave terminals if they exist.
     if (vscode.window.terminals.length > 0) {
         const activeTerminal = vscode.window.activeTerminal;
         if (activeTerminal !== undefined && activeTerminal.name === requiredName) {
