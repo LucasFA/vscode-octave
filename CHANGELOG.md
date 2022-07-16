@@ -1,6 +1,6 @@
 # Change Log
 
-## [0.4.0] 2022-07-16
+## [0.5.0] 2022-07-16
 
 * Customization: you can now set the path to your octave executable, instead of relying on having it in the PATH variable.
 
