@@ -8,7 +8,6 @@ export class Commands implements vscode.Disposable {
     private outputChannel: vscode.OutputChannel;
     private terminal: vscode.Terminal;
     private document: vscode.TextDocument;
-    private cwd: string;
     private isRunning: boolean;
     private process;
 
@@ -80,8 +79,7 @@ export class Commands implements vscode.Disposable {
             return;
         }
 
-        const fileName = basename(this.document.fileName);
-        this.cwd = dirname(this.document.fileName);
+        const fullPath = this.document.fileName;
 
         const config = util.config();
         const runInTerminal = config.get<boolean>("runInTerminal");
@@ -89,33 +87,37 @@ export class Commands implements vscode.Disposable {
         const preserveFocus = config.get<boolean>("preserveFocus");
         if (runInTerminal) {
             this.terminal = await util.setupTerminal();
-            this.executeFileInTerminal(fileName, clearPreviousOutput, preserveFocus);
+            this.executeFileInTerminal(fullPath, clearPreviousOutput, preserveFocus);
         } else {
-            this.executeFileInOutputChannel(fileName, clearPreviousOutput, preserveFocus);
+            this.executeFileInOutputChannel(fullPath, clearPreviousOutput, preserveFocus);
         }
     }
 
-    public executeFileInTerminal(fileName: string, clearPreviousOutput: boolean, preserveFocus: boolean): void {
+    public executeFileInTerminal(fullPath: string, clearPreviousOutput: boolean, preserveFocus: boolean): void {
         if (clearPreviousOutput) {
             vscode.commands.executeCommand("workbench.action.terminal.clear");
         }
         this.terminal.show(preserveFocus);
         // TODO: deal with encoding. Path names with tildes and such have problems
-        this.terminal.sendText(`cd "${this.cwd.split("\\").join("/")}"`);
-        this.terminal.sendText(`run "${fileName}"`);
+
+        const cwd = dirname(fullPath).split("\\").join("/");
+        this.terminal.sendText(`cd "${cwd}"`);
+
+        const fileBaseName = basename(fullPath)
+        this.terminal.sendText(`run "${fileBaseName}"`);
     }
 
-    public executeFileInOutputChannel(fileName: string, clearPreviousOutput: boolean, preserveFocus: boolean): void {
+    public executeFileInOutputChannel(fileFullPath: string, clearPreviousOutput: boolean, preserveFocus: boolean): void {
         if (clearPreviousOutput) {
             this.outputChannel.clear();
         }
         this.isRunning = true;
         this.outputChannel.show(preserveFocus);
-        this.outputChannel.appendLine(`[Running] ${basename(fileName)}`);
+        this.outputChannel.appendLine(`[Running] ${basename(fileFullPath)}`);
         const exec = require("child_process").exec;
         const startTime = new Date();
         const octaveLocation = util.getConfig<string>("octaveLocation", globals.OCTAVE_PATH);
-        this.process = exec(`"${octaveLocation}" ${fileName}`, { cwd: this.cwd });
+        this.process = exec(`"${octaveLocation}" ${basename(fileFullPath)}`, { cwd: dirname(fileFullPath) });
 
         this.process.stdout.on("data", (data) => {
             this.outputChannel.append(data);
