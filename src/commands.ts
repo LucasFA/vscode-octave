@@ -4,7 +4,7 @@ import * as vscode from "vscode";
 import * as util from "./util";
 import * as globals from "./globals";
 
-export class Commands implements vscode.Disposable {
+export abstract class Commands implements vscode.Disposable {
     private outputChannel: vscode.OutputChannel;
     private terminal: vscode.Terminal;
     private document: vscode.TextDocument;
@@ -13,6 +13,11 @@ export class Commands implements vscode.Disposable {
 
     constructor() {
         this.outputChannel = vscode.window.createOutputChannel(globals.LANGUAGE_NAME);
+        this.terminal = undefined;
+        this.document = undefined;
+        this.isRunning = false;
+        this.process = undefined;
+
     }
 
     public async runLines(): Promise<void> {
