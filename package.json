@@ -104,13 +104,8 @@
 		"languages": [
 			{
 				"id": "octave",
-				"aliases": [
-					"Octave",
-					"octave"
-				],
-				"extensions": [
-					".m"
-				],
+				"aliases": ["Octave", "octave"],
+				"extensions": [	".m"],
 				"configuration": "./language-configuration.json"
 			}
 		],
