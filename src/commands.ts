@@ -4,7 +4,7 @@ import * as vscode from "vscode";
 import * as util from "./util";
 import * as globals from "./globals";
 
-export abstract class Commands implements vscode.Disposable {
+export class Commands implements vscode.Disposable {
     private outputChannel: vscode.OutputChannel;
     private terminal: vscode.Terminal;
     private document: vscode.TextDocument;
