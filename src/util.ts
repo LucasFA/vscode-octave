@@ -44,7 +44,7 @@ function getOctavefromEnvPath(platform: string): string | undefined {
     return undefined;
 }
 
-export async function setupTerminal(requiredName: string = globals.LANGUAGE_NAME): Promise<vscode.Terminal> {
+export function setupTerminal(requiredName: string = globals.LANGUAGE_NAME): vscode.Terminal {
     // Don't create redundant terminals. Use existing Octave terminals if they exist.
     if (vscode.window.terminals.length > 0) {
         const activeTerminal = vscode.window.activeTerminal;
@@ -77,10 +77,6 @@ export async function setupTerminal(requiredName: string = globals.LANGUAGE_NAME
 
     const term = vscode.window.createTerminal(terminalOptions);
     return term;
-}
-
-export async function delay(ms: number) {
-    return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
 export async function saveDocument(document: vscode.TextDocument): Promise<boolean> {
