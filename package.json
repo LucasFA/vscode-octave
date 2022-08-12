@@ -25,9 +25,7 @@
 		"url": "https://github.com/LucasFA/vscode-octave/issues"
 	},
 	"activationEvents": [
-		"onLanguage:Octave",
-		"onCommand:octave.run",
-		"onCommand:octave.runLines"
+		"onLanguage:octave"
 	],
 	"extensionKind": [
 		"workspace"
