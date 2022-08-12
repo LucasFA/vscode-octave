@@ -71,8 +71,8 @@ export function setupTerminal(requiredName: string = globals.LANGUAGE_NAME): vsc
     const terminalOptions: vscode.TerminalOptions = {
         name: requiredName,
         shellPath: octavePath,
+        shellArgs: ["--quiet"],
         cwd: path.dirname(vscode.workspace.workspaceFolders[0].uri.fsPath)
-
     }
 
     const term = vscode.window.createTerminal(terminalOptions);
