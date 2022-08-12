@@ -24,6 +24,10 @@ Running the current document might run it on the terminal or on an output channe
 2. Add `C:\Octave\Octave-7.1.0\mingw64\bin` (that is, add to the Octave installation path you noted before `\mingw64\bin` to the end) to your system's PATH environment variable.
 3. Install the extension.
 
+## Known issues
+
+- Currently plots are not presented when running a script in an output channel. As a workaround, run the script in the terminal: set `octave.runInTerminal` to `true`.
+- If executing a file with non-ASCII characters in the file path, the output will include the code executed in addition to the output of the script.
 
 ## Release Notes
  See [CHANGELOG.md](https://github.com/LucasFA/vscode-octave/blob/master/CHANGELOG.md)

@@ -1,6 +1,8 @@
 "use strict";
 import { basename, dirname } from "path";
 import * as vscode from "vscode";
+import * as child from 'child_process';
+
 import * as util from "./util";
 import * as globals from "./globals";
 
@@ -77,26 +79,27 @@ export class Ctx implements vscode.Disposable {
         this.isRunning = true;
         this._outputChannel.show(preserveFocus);
         this._outputChannel.appendLine(`[Running] ${basename(filePath)}`);
-        const exec = require("child_process").exec;
+        this._outputChannel.appendLine("");
+
         const startTime = new Date();
         const octaveLocation = util.getConfig<string>("octaveLocation");
 
-        this._process = exec(`"${octaveLocation}" ${basename(filePath)}`, { cwd: dirname(filePath) });
-
-        this._process.stdout.on("data", (data) => {
-            this._outputChannel.append(data);
-        });
-
-        this._process.stderr.on("data", (data) => {
-            this._outputChannel.append(data);
-        });
-
-        this._process.on("close", (code) => {
+        const args = [basename(filePath)];
+        const options = { cwd: dirname(filePath)};
+        this._process = child.execFile(octaveLocation, args, options, (error, stdout, stderr) => {
+            if (error) {
+                this._outputChannel.appendLine(`[Error] ${error.message}`);
+            }
+            if (stdout) {
+                this._outputChannel.appendLine(`[Output] ${stdout}`);
+            }
+            if (stderr) {
+                this._outputChannel.appendLine(`[Error] ${stderr}`);
+            }
             this.isRunning = false;
             const endTime = new Date();
-            const elapsedTime = (endTime.getTime() - startTime.getTime()) / 1000;
-            this._outputChannel.appendLine(`[Done] exit with code=${code} in ${elapsedTime} seconds`);
-            this._outputChannel.appendLine("");
+            const elapsedTime = endTime.getTime() - startTime.getTime();
+            this._outputChannel.appendLine(`[Finished] ${basename(filePath)} (${elapsedTime}ms)`);
         });
     }
 
