@@ -1,29 +1,19 @@
 "use strict";
 import * as vscode from "vscode";
-import { Commands } from "./commands";
+import * as cmds from "./cmds";
+import { Ctx } from "./Ctx";
 
-const commands = new Commands();
+let ctx: Ctx | undefined;
 
 export function activate(context: vscode.ExtensionContext) {
-
-    const run = vscode.commands.registerCommand("octave.run", (fileUri: vscode.Uri) => {
-        commands.executeFile(fileUri);
-    });
+    ctx = Ctx.create(context);
     
-    const runLines = vscode.commands.registerCommand("octave.runLines", () => {
-        commands.runLines();
-    });
+    ctx.registerCommand("run", cmds.executeFile);
+    ctx.registerCommand("runLines", cmds.runLines);
+    ctx.registerCommand("stop", cmds.stopCommand);
 
-    const stop = vscode.commands.registerCommand("octave.stop", () => {
-        commands.stopCommand();
-    });
-
-    context.subscriptions.push(run);
-    context.subscriptions.push(runLines);
-    context.subscriptions.push(commands);
-    context.subscriptions.push(stop)
 }
 
 export function deactivate() {
-    commands.stopCommand();
+    ctx.dispose();
 }

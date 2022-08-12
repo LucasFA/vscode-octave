@@ -1,5 +1,5 @@
 import * as extension from '../extension';
-import * as command from '../commands';
+import * as ctx from '../Ctx';
 import * as vscode from 'vscode'
 
 describe('(not) testing util.ts', () => {
