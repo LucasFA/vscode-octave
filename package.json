@@ -26,6 +26,9 @@
 		"onCommand:octave.runLines",
 		"onCommand:octave.stop"
 	],
+	"extensionKind": [
+		"workspace"
+	],
 	"main": "./out/extension",
 	"contributes": {
 		"commands": [
