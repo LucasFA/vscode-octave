@@ -9,22 +9,25 @@
 		"vscode": "^1.66.0"
 	},
 	"categories": [
-		"Programming Languages"
+		"Programming Languages",
+		"Snippets"
 	],
 	"keywords": [
 		"Octave",
 		"Octave Language"
 	],
-	"license": "See license in LICENSE",
+	"license": "MIT",
 	"repository": {
 		"type": "git",
 		"url": "https://github.com/LucasFA/vscode-octave"
 	},
+	"bugs": {
+		"url": "https://github.com/LucasFA/vscode-octave/issues"
+	},
 	"activationEvents": [
 		"onLanguage:Octave",
 		"onCommand:octave.run",
-		"onCommand:octave.runLines",
-		"onCommand:octave.stop"
+		"onCommand:octave.runLines"
 	],
 	"extensionKind": [
 		"workspace"
