@@ -3,7 +3,8 @@ import { basename, dirname } from "path";
 import * as vscode from "vscode";
 import * as util from "./util";
 import * as globals from "./globals";
-import { Cmd } from "./cmds";
+
+export type Cmd = (...args: any[]) => unknown;
 
 export class Ctx implements vscode.Disposable {
     private _extCtx: vscode.ExtensionContext;
@@ -17,6 +18,7 @@ export class Ctx implements vscode.Disposable {
         outputChannel: vscode.OutputChannel
     ) { 
         this._extCtx = extCtx;
+        this._extCtx.subscriptions.push(this);
         this._outputChannel = outputChannel;
         this.isRunning = false;
     }
@@ -100,6 +102,8 @@ export class Ctx implements vscode.Disposable {
 
     public dispose() {
         this._terminal.dispose();
+        this._outputChannel.dispose();
+        
         if (this.isRunning) {
             this.isRunning = false;
             const kill = require("tree-kill");

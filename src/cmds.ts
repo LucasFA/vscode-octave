@@ -1,8 +1,6 @@
 import * as vscode from "vscode";
-import { Ctx } from "./Ctx";
+import { Ctx, Cmd } from "./Ctx";
 import * as util from "./util";
-
-export type Cmd = (...args: any[]) => unknown;
 
 export function runLines(ctx: Ctx): Cmd {
     return async () => {
