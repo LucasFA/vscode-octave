@@ -1,5 +1,9 @@
 # Change Log
 
+## [0.5.3] 2020-08-12
+
+* Added a known issues section to the readme.
+
 ## [0.5.2] 2022-07-16
 
 * Bugfix: execution of files with paths including non-ASCII characters are now dealt with appropiately. However, running in terminal will output the contents of the file besides the output of the command, which is bad UX due to all the cluttering.
