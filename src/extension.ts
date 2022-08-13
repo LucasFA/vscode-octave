@@ -1,7 +1,7 @@
 "use strict";
 import * as vscode from "vscode";
 import * as cmds from "./cmds";
-import { Ctx } from "./Ctx";
+import Ctx from "./Ctx";
 
 let ctx: Ctx | undefined;
 

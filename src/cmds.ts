@@ -1,5 +1,5 @@
 import * as vscode from "vscode";
-import { Ctx, Cmd } from "./Ctx";
+import Ctx, { Cmd } from "./Ctx";
 import * as util from "./util";
 
 export function runLines(ctx: Ctx): Cmd {
@@ -61,10 +61,9 @@ export function executeFile(ctx: Ctx): Cmd {
             return;
         }
 
-        const config = util.config();
-        const runInTerminal = config.get<boolean>("runInTerminal");
-        const clearPreviousOutput = config.get<boolean>("clearPreviousOutput");
-        const preserveFocus = config.get<boolean>("preserveFocus");
+        const runInTerminal = ctx.config.get<boolean>("runInTerminal");
+        const clearPreviousOutput = ctx.config.get<boolean>("clearPreviousOutput");
+        const preserveFocus = ctx.config.get<boolean>("preserveFocus");
         if (runInTerminal) {
             ctx.executeFileInTerminal(document, clearPreviousOutput, preserveFocus);
         } else {
