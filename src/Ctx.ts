@@ -41,8 +41,11 @@ export default class Ctx implements vscode.Disposable {
     }
 
     get terminal(): vscode.Terminal {
+        function isRunning(term: vscode.Terminal): boolean {
+            return term && term.exitStatus === undefined;
+        }
         // Don't create redundant terminals. Use existing Octave terminals if they exist.
-        if (this._terminal) {
+        if (isRunning(this._terminal)) {
             return this._terminal;
         }
 
@@ -59,18 +62,17 @@ export default class Ctx implements vscode.Disposable {
         }
 
         const isExtensionCreatedTerminal = (terminal: vscode.Terminal) => {
-            if (!(activeTerminal.name === wantedTermName && isVSCTerminalOptions(activeTerminal.creationOptions))) {
+            if (!(activeTerminal?.name === wantedTermName && isVSCTerminalOptions(activeTerminal.creationOptions))) {
                 return false;
             }
             return activeTerminal.creationOptions.shellPath === octavePath;
         };
-
         const activeTerminal = vscode.window.activeTerminal;
-        if (isExtensionCreatedTerminal(activeTerminal)) {
-            this._terminal = activeTerminal;
-            return this._terminal;
-        }
-        const fittingTerminal = vscode.window.terminals.find(isExtensionCreatedTerminal);
+        const candidates = [activeTerminal].concat(vscode.window.terminals);
+
+        const fittingTerminal = candidates.find((term: vscode.Terminal) => {
+            return isRunning(term) && isExtensionCreatedTerminal(term);
+        });
 
         if (fittingTerminal) {
             this._terminal = fittingTerminal;
