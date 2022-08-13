@@ -1,8 +1,5 @@
 "use strict";
 import * as vscode from "vscode";
-import * as globals from "./globals"
-import * as fs from "fs";
-import * as path from 'path';
 
 
 export async function saveDocument(document: vscode.TextDocument): Promise<boolean> {
