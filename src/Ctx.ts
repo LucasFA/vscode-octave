@@ -5,12 +5,13 @@ import { ChildProcess, execFile } from 'child_process';
 import { existsSync } from 'fs';
 
 import * as globals from "./globals";
+import * as Cfg from "./Cfg";
 
 export type Cmd = (...args: any[]) => unknown;
 
 export default class Ctx implements vscode.Disposable {
     private _extCtx: vscode.ExtensionContext;
-    private _config: vscode.WorkspaceConfiguration;
+    private _config: Cfg.Config;
     private _outputChannel: vscode.OutputChannel;
     private _terminal: vscode.Terminal | undefined;
     public isRunning: boolean;
@@ -22,10 +23,7 @@ export default class Ctx implements vscode.Disposable {
     ) {
         this._extCtx = extCtx;
         this._extCtx.subscriptions.push(this);
-        this._config = vscode.workspace.getConfiguration(globals.EXTENSION_NAME);
-        this._extCtx.subscriptions.push(vscode.workspace.onDidChangeConfiguration(() => {
-            this._config = vscode.workspace.getConfiguration(globals.EXTENSION_NAME);
-        }));
+        this._config = new Cfg.Config(this._extCtx);
         this._outputChannel = outputChannel;
         this.isRunning = false;
 
@@ -38,7 +36,7 @@ export default class Ctx implements vscode.Disposable {
         return res;
     }
 
-    get config(): vscode.WorkspaceConfiguration {
+    get config(): Cfg.Config {
         return this._config;
     }
 
@@ -53,27 +51,27 @@ export default class Ctx implements vscode.Disposable {
         }
 
         const wantedTermName = globals.LANGUAGE_NAME;
-        
+
         let octavePath = this.config.get<string>("octaveLocation");
         if (!octavePath) {
             const platform: string = process.platform;
             octavePath = getOctavefromEnvPath(platform);
         }
-        
+
         const isExtensionCreatedTerminal = (terminal: vscode.Terminal) => {
             if (!(activeTerminal.name === wantedTermName && isVSCTerminalOptions(activeTerminal.creationOptions))) {
                 return false;
             }
             return activeTerminal.creationOptions.shellPath === octavePath;
         };
-        
+
         const activeTerminal = vscode.window.activeTerminal;
         if (isExtensionCreatedTerminal(activeTerminal)) {
             this._terminal = activeTerminal;
             return this._terminal;
         }
         const fittingTerminal = vscode.window.terminals.find(isExtensionCreatedTerminal);
-        
+
         if (fittingTerminal) {
             this._terminal = fittingTerminal;
             return this._terminal;

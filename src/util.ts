@@ -5,13 +5,6 @@ import * as fs from "fs";
 import * as path from 'path';
 
 
-export type ConfigField =
-    "showRunIconInEditorTitleMenu" |
-    "runInTerminal"                |
-    "clearPreviousOutput"          |
-    "preserveFocus"                |
-    "octaveLocation";
-
 export async function saveDocument(document: vscode.TextDocument): Promise<boolean> {
     if (document.isUntitled) {
         void vscode.window.showErrorMessage('Document is unsaved. Please save and retry.');
