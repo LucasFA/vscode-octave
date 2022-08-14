@@ -121,14 +121,14 @@
                     ]
                 },
                 {
-                    "begin": "%\\{",
+                    "begin": "^[\\s]*((%|#)\\{)[\\s]*\\n",
                     "captures": {
                         "1": {
                             "name": "punctuation.definition.comment.octave"
                         }
                     },
-                    "end": "%\\}",
-                    "name": "comment.block.percentage.octave"
+                    "end": "^[\\s]*((%|#)\\})[\\s]*\\n",
+                    "name": "comment.block.octave"
                 },
                 {
                     "begin": "(^[ \\t]+)?(?=%)",
