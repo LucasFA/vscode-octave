@@ -2,16 +2,16 @@
 import * as path from "path";
 import * as vscode from "vscode";
 import { ChildProcess, execFile } from 'child_process';
-import { existsSync } from 'fs';
+import * as fs from 'fs';
 
 import * as globals from "./globals";
-import * as Cfg from "./Cfg";
+import { Config } from "./Cfg";
 
 export type Cmd = (...args: any[]) => unknown;
 
 export default class Ctx implements vscode.Disposable {
     private _extCtx: vscode.ExtensionContext;
-    private _config: Cfg.Config;
+    private _config: Config;
     private _outputChannel: vscode.OutputChannel;
     private _terminal: vscode.Terminal | undefined;
     public isRunning: boolean;
@@ -23,7 +23,7 @@ export default class Ctx implements vscode.Disposable {
     ) {
         this._extCtx = extCtx;
         this._extCtx.subscriptions.push(this);
-        this._config = new Cfg.Config(this._extCtx);
+        this._config = new Config(this._extCtx);
         this._outputChannel = outputChannel;
         this.isRunning = false;
 
@@ -36,7 +36,7 @@ export default class Ctx implements vscode.Disposable {
         return res;
     }
 
-    get config(): Cfg.Config {
+    get config(): Config {
         return this._config;
     }
 
@@ -188,7 +188,7 @@ function getOctavefromEnvPath(platform: string): string | undefined {
     const envPaths: string[] | string = process.env.PATH.split(splitChar);
     for (const env_path of envPaths) {
         const octave_path: string = path.join(env_path, fileName + fileExtension);
-        if (existsSync(octave_path)) {
+        if (fs.existsSync(octave_path)) {
             return octave_path;
         }
     }
