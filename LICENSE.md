@@ -1,6 +1,7 @@
 MIT License
 
 Copyright (c) 2022 LucasFA [LucasFA/vscode-octave](https://github.com/LucasFA/vscode-octave)
+
 Copyright (c) 2017 leafvmaple [leafvmaple/vscode-octave](https://github.com/leafvmaple/vscode-octave)
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
