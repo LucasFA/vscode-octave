@@ -16,8 +16,13 @@ const otherDefaults = {
 } as const;
 
 type ConfigFieldReturnType = {
-    [P in ConfigField]: typeof otherDefaults[P];
+    "showRunIconInEditorTitleMenu": boolean;
+    "runInTerminal": boolean;
+    "clearPreviousOutput": boolean;
+    "preserveFocus": boolean;
+    "octaveLocation": string;
 };
+
 type possibleReturnTypes = ConfigFieldReturnType[keyof ConfigFieldReturnType];
 
 export class Config {
@@ -33,7 +38,7 @@ export class Config {
 
     public get<T extends possibleReturnTypes>(section: ConfigField): T {
         const sectionDefault = this._config.get<T>(section);
-        if (sectionDefault === undefined) {
+        if (!sectionDefault) { // Note: it checks for empty string, not only undefined
             return otherDefaults[section];
         }
         return sectionDefault;

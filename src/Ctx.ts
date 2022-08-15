@@ -42,33 +42,25 @@ export default class Ctx implements vscode.Disposable {
 
     get terminal(): vscode.Terminal {
         function isRunning(term: vscode.Terminal): boolean {
-            return term && term.exitStatus === undefined;
+            return term && (term.exitStatus === undefined);
         }
         // Don't create redundant terminals. Use existing Octave terminals if they exist.
         if (isRunning(this._terminal)) {
             return this._terminal;
         }
 
+        const wantedTermName = globals.LANGUAGE_NAME;
+        const octavePath = this.config.get<string>("octaveLocation");
+        const activeTerminal = vscode.window.activeTerminal;
+
         function isVSCTerminalOptions(ob: vscode.TerminalOptions | vscode.ExtensionTerminalOptions): ob is vscode.TerminalOptions {
             return "shellPath" in ob;
         }
-
-        const wantedTermName = globals.LANGUAGE_NAME;
-        const octavePath = this.config.get<string>("octaveLocation");        
-
-        let octavePath = this.config.get<string>("octaveLocation");
-        if (!octavePath) {
-            const platform: string = process.platform;
-            octavePath = getOctavefromEnvPath(platform);
-        }
-
-        const isExtensionCreatedTerminal = (terminal: vscode.Terminal) => {
-            if (!(activeTerminal?.name === wantedTermName && isVSCTerminalOptions(activeTerminal.creationOptions))) {
-                return false;
-            }
-            return activeTerminal.creationOptions.shellPath === octavePath;
+        function isExtensionCreatedTerminal(term: vscode.Terminal) {
+            return term?.name === wantedTermName &&
+                isVSCTerminalOptions(term.creationOptions) &&
+                term.creationOptions.shellPath === octavePath;
         };
-        const activeTerminal = vscode.window.activeTerminal;
         const candidates = [activeTerminal].concat(vscode.window.terminals);
 
         const fittingTerminal = candidates.find((term: vscode.Terminal) => {
