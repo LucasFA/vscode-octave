@@ -54,6 +54,7 @@ export default class Ctx implements vscode.Disposable {
         }
 
         const wantedTermName = globals.LANGUAGE_NAME;
+        const octavePath = this.config.get<string>("octaveLocation");        
 
         let octavePath = this.config.get<string>("octaveLocation");
         if (!octavePath) {
@@ -172,25 +173,4 @@ export default class Ctx implements vscode.Disposable {
             kill(this._process.pid);
         }
     }
-}
-
-function getOctavefromEnvPath(platform: string): string | undefined {
-    let fileName = "octave";
-    let splitChar = ':';
-    let fileExtension = '';
-
-    if (platform === 'win32') {
-        fileName += "-cli";
-        splitChar = ';';
-        fileExtension = '.exe';
-    }
-
-    const envPaths: string[] | string = process.env.PATH.split(splitChar);
-    for (const env_path of envPaths) {
-        const octave_path: string = path.join(env_path, fileName + fileExtension);
-        if (fs.existsSync(octave_path)) {
-            return octave_path;
-        }
-    }
-    return undefined;
 }

@@ -1,6 +1,8 @@
 
 import * as vscode from "vscode";
 import * as globals from "./globals";
+import * as fs from 'fs';
+import * as path from 'path';
 
 export type ConfigField =
     "showRunIconInEditorTitleMenu" |
@@ -9,7 +11,16 @@ export type ConfigField =
     "preserveFocus" |
     "octaveLocation";
 
-export class Config implements vscode.WorkspaceConfiguration{
+const otherDefaults = {
+    octaveLocation: getOctavefromEnvPath()
+} as const;
+
+type ConfigFieldReturnType = {
+    [P in ConfigField]: typeof otherDefaults[P];
+};
+type possibleReturnTypes = ConfigFieldReturnType[keyof ConfigFieldReturnType];
+
+export class Config {
     private _config: vscode.WorkspaceConfiguration;
 
     constructor(extCtx: vscode.ExtensionContext) {
@@ -20,9 +31,12 @@ export class Config implements vscode.WorkspaceConfiguration{
         }));
     }
 
-    public get<T>(section: ConfigField): T | undefined;
-    public get<T>(section: ConfigField, defaultValue?: T): T {
-        return this._config.get<T>(section, defaultValue);
+    public get<T extends possibleReturnTypes>(section: ConfigField): T {
+        const sectionDefault = this._config.get<T>(section);
+        if (sectionDefault === undefined) {
+            return otherDefaults[section];
+        }
+        return sectionDefault;
     }
     public has(section: ConfigField) {
         return this._config.has(section);
@@ -35,3 +49,27 @@ export class Config implements vscode.WorkspaceConfiguration{
         return this._config.update(section, value, configurationTarget);
     }
 }
+
+function getOctavefromEnvPath(): string | undefined {
+    let fileRoot = "octave";
+    let splitChar = ':';
+    let fileExtension = '';
+
+    const platform = process.platform;
+    if (platform === 'win32') {
+        fileRoot += "-cli";
+        splitChar = ';';
+        fileExtension = '.exe';
+    }
+    const fileName = fileRoot + fileExtension;
+
+    const envPaths: string[] | string = process.env.PATH.split(splitChar);
+    for (const env_path of envPaths) {
+        const octave_path: string = path.join(env_path, fileName);
+        if (fs.existsSync(octave_path)) {
+            return octave_path;
+        }
+    }
+    return undefined;
+}
+
