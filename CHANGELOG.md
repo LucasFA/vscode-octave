@@ -1,6 +1,12 @@
-# Change Log
+# Changelog
 
-## [0.5.3] 2020-08-12
+## [0.5.4] 2022-08-14
+
+* Fix running in outputChannel with no octaveLocation setting set
+
+* Added highlighting and autoclosing for `#{ #}` comment blocks.
+
+## [0.5.3] 2022-08-12
 
 * Added a known issues section to the readme.
 
