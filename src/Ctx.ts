@@ -115,12 +115,8 @@ export default class Ctx implements vscode.Disposable {
         const regex: RegExp = /[^\x00-\x7F]/g;
         const isNonAscii = regex.test(filePath);
 
-        if (isNonAscii) {
-            this.terminal.sendText(`"${document.getText()}"`);
-        }
-        else {
-            this.terminal.sendText(`run "${filePath}"`);
-        }
+        const command = isNonAscii ? `"${document.getText()}"` : `run "${filePath}"`;
+        this.terminal.sendText(command);
     }
 
     public executeFileInOutputChannel(document: vscode.TextDocument, clearPreviousOutput: boolean, preserveFocus: boolean): void {
