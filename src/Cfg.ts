@@ -38,8 +38,8 @@ export class Config {
 
     public get<T extends possibleReturnTypes>(section: ConfigField): T {
         const sectionDefault = this._config.get<T>(section);
-        if (!sectionDefault) { // Note: it checks for empty string, not only undefined
-            return otherDefaults[section];
+        if (section == "octaveLocation" && !sectionDefault) { // Note: it checks for empty string, not only undefined
+            return otherDefaults[section] as T;
         }
         return sectionDefault;
     }
