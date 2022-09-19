@@ -1,5 +1,9 @@
 # Changelog
 
+## [0.5.5] 2022-09-19
+
+* Fixed a bug where some settings would not work.
+
 ## [0.5.4] 2022-08-14
 
 * Fix running in outputChannel with no octaveLocation setting set
