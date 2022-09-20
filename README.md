@@ -1,13 +1,21 @@
 This is a fork of leafvmaple's Octave Language extension, [also available in GitHub](https://github.com/leafvmaple/vscode-octave).
 This extension pretends to make some quality of life adjusments to it.
 
-# Features
+## Features
 
 - Keeps the Octave terminal open so you can mess around after executing a script. 
 - Add keybinds for easy execution.
 - Adds a few snippets.
 
-## Keybinds
+### Matlab compatibility
+
+If you are using Matlab, you should install an extension that launches matlab terminals or do so yourself. I recommend this one: [Matlab Interactive Terminal](https://marketplace.visualstudio.com/items?itemName=apommel.matlab-interactive-terminal).
+
+Then, launch the Matlab terminal and use the extension as usual.
+
+If you wish, you can force the usage of an Octave terminal by setting the `octave.allowMatlab` setting to `false`.
+
+### Keybinds
 This are the defaults. You can modify them.
 | Command           | Keybind                | Comment                          |
 |-------------------|------------------------|----------------------------------|
@@ -16,7 +24,7 @@ This are the defaults. You can modify them.
 
 Running the current document might run it on the terminal or on an output channel depending on the setting `octave.runInTerminal`
 
-## Setup Guide
+## Setup
 
 ### Windows
 

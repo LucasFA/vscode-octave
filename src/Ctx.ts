@@ -49,23 +49,21 @@ export default class Ctx implements vscode.Disposable {
             return this._terminal;
         }
 
-        const wantedTermName = globals.LANGUAGE_NAME;
-        const octavePath = this.config.get<string>("octaveLocation");
         const activeTerminal = vscode.window.activeTerminal;
+        const matlabMode: boolean = this.config.get("allowMatLab");
 
-        function isVSCTerminalOptions(ob: vscode.TerminalOptions | vscode.ExtensionTerminalOptions): ob is vscode.TerminalOptions {
-            return "shellPath" in ob;
+        let tempCandidateNames: string[] = [globals.LANGUAGE_NAME];
+        if (matlabMode) {
+            tempCandidateNames.push("MATLAB");
         }
-        function isExtensionCreatedTerminal(term: vscode.Terminal) {
-            return term?.name === wantedTermName &&
-                isVSCTerminalOptions(term.creationOptions) &&
-                term.creationOptions.shellPath === octavePath;
-        };
-        const candidates = [activeTerminal].concat(vscode.window.terminals);
 
-        const fittingTerminal = candidates.find((term: vscode.Terminal) => {
-            return isRunning(term) && isExtensionCreatedTerminal(term);
-        });
+        const terminalCandidateNames = tempCandidateNames.map((name) => name.toLocaleLowerCase());
+
+        function isValidTerminal(term: vscode.Terminal) {
+            return isRunning(term) && terminalCandidateNames.includes(term.name.toLocaleLowerCase());
+        }
+
+        const fittingTerminal = [activeTerminal].concat(vscode.window.terminals).find(isValidTerminal);
 
         if (fittingTerminal) {
             this._terminal = fittingTerminal;
@@ -74,8 +72,10 @@ export default class Ctx implements vscode.Disposable {
 
         // No appropiate terminals. Create
         // TODO: add field for shellArgs from user (settings)
+
+        const octavePath = this.config.get<string>("octaveLocation");
         const terminalOptions: vscode.TerminalOptions = {
-            name: wantedTermName,
+            name: globals.LANGUAGE_NAME,
             shellPath: octavePath,
             shellArgs: ["--quiet"],
             cwd: path.dirname(vscode.workspace.workspaceFolders[0].uri.fsPath)

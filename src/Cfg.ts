@@ -9,7 +9,8 @@ export type ConfigField =
     "runInTerminal" |
     "clearPreviousOutput" |
     "preserveFocus" |
-    "octaveLocation";
+    "octaveLocation" |
+    "allowMatLab";
 
 const otherDefaults = {
     octaveLocation: getOctavefromEnvPath()
@@ -21,6 +22,7 @@ type ConfigFieldReturnType = {
     "clearPreviousOutput": boolean;
     "preserveFocus": boolean;
     "octaveLocation": string;
+    "allowMatLab": boolean;
 };
 
 type possibleReturnTypes = ConfigFieldReturnType[keyof ConfigFieldReturnType];
