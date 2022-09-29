@@ -45,7 +45,7 @@ export class Config {
      * @returns The value `section` denotes or `undefined`.
      */
     public get<T extends ConfigField>(section: T): ConfigFieldReturnType<T>;
-    public get(section: ConfigField): possibleReturnTypes {
+    public get(section: ConfigField): possibleReturnTypes | undefined {
         const sectionDefault = this._config.get(section) as ConfigFieldReturnType<typeof section> | undefined;
         if (section == "octaveLocation" && !sectionDefault) { // Note: it checks for empty string, not only undefined
             return otherDefaultsCallbacks[section]();
@@ -55,7 +55,7 @@ export class Config {
     public has(section: ConfigField) {
         return this._config.has(section);
     }
-    public inspect<T>(section: ConfigField): { key: string; defaultValue?: T; globalValue?: T; workspaceValue?: T; workspaceFolderValue?: T; defaultLanguageValue?: T; globalLanguageValue?: T; workspaceLanguageValue?: T; workspaceFolderLanguageValue?: T; languageIds?: string[]; } {
+    public inspect<T>(section: ConfigField): undefined | { key: string; defaultValue?: T; globalValue?: T; workspaceValue?: T; workspaceFolderValue?: T; defaultLanguageValue?: T; globalLanguageValue?: T; workspaceLanguageValue?: T; workspaceFolderLanguageValue?: T; languageIds?: string[]; } {
         return this._config.inspect<T>(section);
     }
 
@@ -77,11 +77,14 @@ function getOctavefromEnvPath(): string | undefined {
     }
     const fileName = fileRoot + fileExtension;
 
-    const envPaths = process.env.PATH.split(splitChar);
-    for (const env_path of envPaths) {
-        const octave_path: string = path.join(env_path, fileName);
-        if (fs.existsSync(octave_path)) {
-            return octave_path;
+    const envPaths = process.env.PATH?.split(splitChar);
+    
+    if (envPaths) {
+        for (const env_path of envPaths) {
+            const octave_path: string = path.join(env_path, fileName);
+            if (fs.existsSync(octave_path)) {
+                return octave_path;
+            }
         }
     }
     return undefined;
