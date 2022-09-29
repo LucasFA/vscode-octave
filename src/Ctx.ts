@@ -69,7 +69,7 @@ export default class Ctx implements vscode.Disposable {
         // No appropiate terminals. Create
         // TODO: add field for shellArgs from user (settings)
 
-        const octavePath = this.config.get<string>("octaveLocation");
+        const octavePath = this.config.get("octaveLocation");
         const terminalOptions: vscode.TerminalOptions = {
             name: globals.LANGUAGE_NAME,
             shellPath: octavePath,
@@ -94,7 +94,7 @@ export default class Ctx implements vscode.Disposable {
 
 
     public runText(code: string): void {
-        const preserveFocus = this.config.get<boolean>("preserveFocus");
+        const preserveFocus = this.config.get("preserveFocus");
         this.terminal.show(preserveFocus);
         this.terminal.sendText(code);
     };
@@ -126,7 +126,7 @@ export default class Ctx implements vscode.Disposable {
         this._outputChannel.appendLine("");
 
         const startTime = new Date();
-        const octaveLocation = this.config.get<string>("octaveLocation");
+        const octaveLocation = this.config.get("octaveLocation");
 
         const args = [path.basename(filePath)];
         const options = { cwd: path.dirname(filePath) };

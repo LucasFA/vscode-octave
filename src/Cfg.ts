@@ -4,18 +4,12 @@ import * as globals from "./globals";
 import * as fs from 'fs';
 import * as path from 'path';
 
-export type ConfigField =
-    "showRunIconInEditorTitleMenu" |
-    "runInTerminal" |
-    "clearPreviousOutput" |
-    "preserveFocus" |
-    "octaveLocation";
 
 const otherDefaultsCallbacks = {
     octaveLocation: getOctavefromEnvPath
 } as const;
 
-type ConfigFieldReturnType = {
+type ConfigFieldTypeDict = {
     "showRunIconInEditorTitleMenu": boolean;
     "runInTerminal": boolean;
     "clearPreviousOutput": boolean;
@@ -23,7 +17,10 @@ type ConfigFieldReturnType = {
     "octaveLocation": string;
 };
 
-type possibleReturnTypes = ConfigFieldReturnType[keyof ConfigFieldReturnType];
+type ConfigField = keyof ConfigFieldTypeDict;
+type possibleReturnTypes = ConfigFieldTypeDict[ConfigField];
+
+type ConfigFieldReturnType<T extends ConfigField> = ConfigFieldTypeDict[T]
 
 export class Config {
     private _config: vscode.WorkspaceConfiguration;
@@ -36,10 +33,22 @@ export class Config {
         }));
     }
 
-    public get<T extends possibleReturnTypes>(section: ConfigField): T {
-        const sectionDefault = this._config.get<T>(section);
+    // read https://www.javiercasas.com/articles/typescript-dependent-types for more info
+    // TLDR: using string literals for the section allows the type checker to narrow T in 
+    // order to use the correct signature, therefore providing developer tooling
+    
+    /**
+     * Returns a value from the configuration.
+     * 
+     * @param `T` Should _not_ be set by the user, a generic is needed to automatically infer the type of the returned value.
+     * @param section Configuration name, supports _dotted_ names
+     * @returns The value `section` denotes or `undefined`.
+     */
+    public get<T extends ConfigField>(section: T): ConfigFieldReturnType<T>;
+    public get(section: ConfigField): possibleReturnTypes {
+        const sectionDefault = this._config.get(section) as ConfigFieldReturnType<typeof section> | undefined;
         if (section == "octaveLocation" && !sectionDefault) { // Note: it checks for empty string, not only undefined
-            return otherDefaultsCallbacks[section]() as T;
+            return otherDefaultsCallbacks[section]();
         }
         return sectionDefault;
     }
@@ -68,7 +77,7 @@ function getOctavefromEnvPath(): string | undefined {
     }
     const fileName = fileRoot + fileExtension;
 
-    const envPaths: string[] | string = process.env.PATH.split(splitChar);
+    const envPaths = process.env.PATH.split(splitChar);
     for (const env_path of envPaths) {
         const octave_path: string = path.join(env_path, fileName);
         if (fs.existsSync(octave_path)) {

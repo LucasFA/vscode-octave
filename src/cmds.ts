@@ -61,9 +61,9 @@ export function executeFile(ctx: Ctx): Cmd {
             return;
         }
 
-        const runInTerminal = ctx.config.get<boolean>("runInTerminal");
-        const clearPreviousOutput = ctx.config.get<boolean>("clearPreviousOutput");
-        const preserveFocus = ctx.config.get<boolean>("preserveFocus");
+        const runInTerminal = ctx.config.get("runInTerminal");
+        const clearPreviousOutput = ctx.config.get("clearPreviousOutput");
+        const preserveFocus = ctx.config.get("preserveFocus");
         if (runInTerminal) {
             ctx.executeFileInTerminal(document, clearPreviousOutput, preserveFocus);
         } else {
