@@ -50,12 +50,8 @@ export default class Ctx implements vscode.Disposable {
         }
 
         const activeTerminal = vscode.window.activeTerminal;
-        const matlabMode: boolean = this.config.get("allowMatLab");
 
-        let tempCandidateNames: string[] = [globals.LANGUAGE_NAME];
-        if (matlabMode) {
-            tempCandidateNames.push("MATLAB");
-        }
+        let tempCandidateNames = [globals.LANGUAGE_NAME, globals.MATLAB_NAME];
 
         const terminalCandidateNames = tempCandidateNames.map((name) => name.toLocaleLowerCase());
 
