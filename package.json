@@ -103,12 +103,6 @@
 					"default": "",
 					"description": "Full path to the octave executable. By default searches the environment PATH variable",
 					"scope": "window"
-				},
-				"octave.allowMatlab": {
-					"type": "boolean",
-					"default": true,
-					"description": "Allow use of a matlab terminal. It should have the name \"matlab\", case insensitive. See readme for more",
-					"scope": "window"
 				}
 			}
 		},
