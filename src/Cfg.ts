@@ -12,8 +12,8 @@ export type ConfigField =
     "octaveLocation" |
     "allowMatLab";
 
-const otherDefaults = {
-    octaveLocation: getOctavefromEnvPath()
+const otherDefaultsCallbacks = {
+    octaveLocation: getOctavefromEnvPath
 } as const;
 
 type ConfigFieldReturnType = {
@@ -41,7 +41,7 @@ export class Config {
     public get<T extends possibleReturnTypes>(section: ConfigField): T {
         const sectionDefault = this._config.get<T>(section);
         if (section == "octaveLocation" && !sectionDefault) { // Note: it checks for empty string, not only undefined
-            return otherDefaults[section] as T;
+            return otherDefaultsCallbacks[section]() as T;
         }
         return sectionDefault;
     }
