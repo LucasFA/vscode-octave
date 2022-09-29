@@ -6,8 +6,7 @@
         "lib": [
             "es6"
         ],
-        "alwaysStrict": true,
-        // "strict": true, TODO: enable this an dfix errors
+        "strict": true, 
         "sourceMap": true,
         "rootDir": "src"
     },
