@@ -3,7 +3,7 @@ import * as vscode from "vscode";
 import * as cmds from "./cmds";
 import Ctx from "./Ctx";
 
-let ctx: Ctx | undefined;
+let ctx: Ctx;
 
 export function activate(context: vscode.ExtensionContext) {
     ctx = Ctx.create(context);

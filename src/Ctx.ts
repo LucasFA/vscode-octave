@@ -41,24 +41,23 @@ export default class Ctx implements vscode.Disposable {
     }
 
     get terminal(): vscode.Terminal {
-        function isRunning(term: vscode.Terminal): boolean {
-            return term && (term.exitStatus === undefined);
+        function isRunning(term: vscode.Terminal | undefined): term is vscode.Terminal {
+            return term !== undefined && term.exitStatus === undefined;
         }
         // Don't create redundant terminals. Use existing Octave terminals if they exist.
         if (isRunning(this._terminal)) {
             return this._terminal;
         }
 
-        const activeTerminal = vscode.window.activeTerminal;
 
         let tempCandidateNames = [globals.LANGUAGE_NAME, globals.MATLAB_NAME];
-
         const terminalCandidateNames = tempCandidateNames.map((name) => name.toLocaleLowerCase());
 
-        function isValidTerminal(term: vscode.Terminal) {
+        function isValidTerminal(term: vscode.Terminal | undefined): term is vscode.Terminal {
             return isRunning(term) && terminalCandidateNames.includes(term.name.toLocaleLowerCase());
         }
 
+        const activeTerminal = vscode.window.activeTerminal;
         const fittingTerminal = [activeTerminal].concat(vscode.window.terminals).find(isValidTerminal);
 
         if (fittingTerminal) {
@@ -70,6 +69,11 @@ export default class Ctx implements vscode.Disposable {
         // TODO: add field for shellArgs from user (settings)
 
         const octavePath = this.config.get("octaveLocation");
+        const workspace = vscode.workspace.workspaceFolders;
+        if (!workspace) {
+            vscode.window.showErrorMessage("No workspace folder found. Please open a folder in VSCode.");
+            return this._terminal;
+        }
         const terminalOptions: vscode.TerminalOptions = {
             name: globals.LANGUAGE_NAME,
             shellPath: octavePath,
@@ -154,7 +158,7 @@ export default class Ctx implements vscode.Disposable {
         if (this.isRunning) {
             this.isRunning = false;
             const kill = require("tree-kill");
-            kill(this._process.pid);
+            kill(this._process?.pid);
         }
     }
 }
