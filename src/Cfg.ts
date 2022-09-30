@@ -20,7 +20,7 @@ type ConfigFieldTypeDict = {
 type ConfigField = keyof ConfigFieldTypeDict;
 type possibleReturnTypes = ConfigFieldTypeDict[ConfigField];
 
-type ConfigFieldReturnType<T extends ConfigField> = ConfigFieldTypeDict[T]
+// type ConfigFieldReturnType<T extends ConfigField> = ConfigFieldTypeDict[T]
 
 export class Config {
     private _config: vscode.WorkspaceConfiguration;
@@ -40,13 +40,13 @@ export class Config {
     /**
      * Returns a value from the configuration.
      * 
-     * @param `T` Should _not_ be set by the user, a generic is needed to automatically infer the type of the returned value.
+     * @template `T` Should _not_ be set by the user, a generic is needed to automatically infer the type of the returned value.
      * @param section Configuration name, supports _dotted_ names
      * @returns The value `section` denotes or `undefined`.
      */
-    public get<T extends ConfigField>(section: T): ConfigFieldReturnType<T>;
+    public get<T extends ConfigField>(section: T): ConfigFieldTypeDict[T];
     public get(section: ConfigField): possibleReturnTypes | undefined {
-        const sectionDefault = this._config.get(section) as ConfigFieldReturnType<typeof section> | undefined;
+        const sectionDefault = this._config.get(section) as ConfigFieldTypeDict[typeof section] | undefined;
         if (section == "octaveLocation" && !sectionDefault) { // Note: it checks for empty string, not only undefined
             return otherDefaultsCallbacks[section]();
         }
