@@ -13,8 +13,6 @@ If you are using Matlab, you should install an extension that launches matlab te
 
 Then, launch the Matlab terminal and use the extension as usual.
 
-If you wish, you can force the usage of an Octave terminal by setting the `octave.allowMatlab` setting to `false`.
-
 ### Keybinds
 This are the defaults. You can modify them.
 | Command           | Keybind                | Comment                          |
