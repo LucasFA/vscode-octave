@@ -73,7 +73,7 @@ export default class Ctx implements vscode.Disposable {
         if (!workspace) {
             vscode.window.showWarningMessage("No workspace folder found. Unknown directory where Octave will open.");
         }
-        const workspacePath = workspace ? path.dirname(workspace[0].uri.fsPath) : undefined;
+        const workspacePath = workspace ? workspace[0].uri.fsPath : undefined;
         const terminalOptions: vscode.TerminalOptions = {
             name: globals.LANGUAGE_NAME,
             shellPath: octavePath,
