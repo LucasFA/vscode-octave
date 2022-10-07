@@ -32,8 +32,8 @@ export default class Ctx implements vscode.Disposable {
 
     static create(extCtx: vscode.ExtensionContext): Ctx {
         const outputChannel = vscode.window.createOutputChannel(globals.LANGUAGE_NAME);
-        const res = new Ctx(extCtx, outputChannel);
-        return res;
+        extCtx.subscriptions.push(outputChannel);
+        return new Ctx(extCtx, outputChannel);
     }
 
     get config(): Config {
