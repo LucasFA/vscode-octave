@@ -4,7 +4,7 @@ import * as globals from "./globals";
 import * as fs from 'fs';
 import * as path from 'path';
 
-
+// Modify get method if you change this
 const otherDefaultsCallbacks = {
     octaveLocation: getOctavefromEnvPath
 } as const;
@@ -14,7 +14,7 @@ type ConfigFieldTypeDict = {
     "runInTerminal": boolean;
     "clearPreviousOutput": boolean;
     "preserveFocus": boolean;
-    "octaveLocation": string;
+    "octaveLocation": string | undefined; // does not have a default value
 };
 
 type ConfigField = keyof ConfigFieldTypeDict;
@@ -36,7 +36,7 @@ export class Config {
     // read https://www.javiercasas.com/articles/typescript-dependent-types for more info
     // TLDR: using string literals for the section allows the type checker to narrow T in 
     // order to use the correct signature, therefore providing developer tooling
-    
+
     /**
      * Returns a value from the configuration.
      * 
@@ -46,9 +46,13 @@ export class Config {
      */
     public get<T extends ConfigField>(section: T): ConfigFieldTypeDict[T];
     public get(section: ConfigField): possibleReturnTypes | undefined {
-        const sectionDefault = this._config.get(section) as ConfigFieldTypeDict[typeof section] | undefined;
-        if (section == "octaveLocation" && !sectionDefault) { // Note: it checks for empty string, not only undefined
-            return otherDefaultsCallbacks[section]();
+        let sectionDefault = this._config.get(section) as ConfigFieldTypeDict[typeof section] | undefined;
+        if (section == "octaveLocation" && !sectionDefault) {
+            sectionDefault = otherDefaultsCallbacks[section]();
+            if (sectionDefault === undefined) {
+                // the user has not set a value for this section
+                vscode.window.showErrorMessage(`Could not find the proper setting. Please set the octave.${section} setting.`);
+            }
         }
         return sectionDefault;
     }
@@ -78,7 +82,7 @@ function getOctavefromEnvPath(): string | undefined {
     const fileName = fileRoot + fileExtension;
 
     const envPaths = process.env.PATH?.split(splitChar);
-    
+
     if (envPaths) {
         for (const env_path of envPaths) {
             const octave_path: string = path.join(env_path, fileName);

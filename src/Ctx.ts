@@ -40,7 +40,7 @@ export default class Ctx implements vscode.Disposable {
         return this._config;
     }
 
-    get terminal(): vscode.Terminal {
+    get terminal(): vscode.Terminal | undefined {
         function isRunning(term: vscode.Terminal | undefined): term is vscode.Terminal {
             return term !== undefined && term.exitStatus === undefined;
         }
@@ -69,6 +69,9 @@ export default class Ctx implements vscode.Disposable {
         // TODO: add field for shellArgs from user (settings)
 
         const octavePath = this.config.get("octaveLocation");
+        if (octavePath === undefined) {
+            return;
+        }
         const workspace = vscode.workspace.workspaceFolders;
         if (!workspace) {
             vscode.window.showWarningMessage("No workspace folder found. Unknown directory where Octave will open.");
@@ -99,15 +102,15 @@ export default class Ctx implements vscode.Disposable {
 
     public runText(code: string): void {
         const preserveFocus = this.config.get("preserveFocus");
-        this.terminal.show(preserveFocus);
-        this.terminal.sendText(code);
+        this.terminal?.show(preserveFocus);
+        this.terminal?.sendText(code);
     };
 
     public executeFileInTerminal(document: vscode.TextDocument, clearPreviousOutput: boolean, preserveFocus: boolean): void {
         if (clearPreviousOutput) {
             vscode.commands.executeCommand("workbench.action.terminal.clear");
         }
-        this.terminal.show(preserveFocus);
+        this.terminal?.show(preserveFocus);
 
         const filePath = document.fileName.split("\\").join("/");
 
@@ -116,7 +119,7 @@ export default class Ctx implements vscode.Disposable {
         const isNonAscii = regex.test(filePath);
 
         const command = isNonAscii ? `"${document.getText()}"` : `run "${filePath}"`;
-        this.terminal.sendText(command);
+        this.terminal?.sendText(command);
     }
 
     public executeFileInOutputChannel(document: vscode.TextDocument, clearPreviousOutput: boolean, preserveFocus: boolean): void {
@@ -131,6 +134,9 @@ export default class Ctx implements vscode.Disposable {
 
         const startTime = new Date();
         const octaveLocation = this.config.get("octaveLocation");
+        if (octaveLocation === undefined) {
+            return;
+        }
 
         const args = [path.basename(filePath)];
         const options = { cwd: path.dirname(filePath) };
