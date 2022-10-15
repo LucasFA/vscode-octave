@@ -56,19 +56,24 @@ export function executeFile(ctx: Ctx): Cmd {
             vscode.window.showInformationMessage("No code found or selected.");
             return;
         }
+
+        // save before execution
         const isSaved = await util.saveDocument(document);
         if (!isSaved) {
             return;
         }
 
-        const runInTerminal = ctx.config.get("runInTerminal");
-        const clearPreviousOutput = ctx.config.get("clearPreviousOutput");
-        const preserveFocus = ctx.config.get("preserveFocus");
-        if (runInTerminal) {
-            ctx.executeFileInTerminal(document, clearPreviousOutput, preserveFocus);
-        } else {
-            ctx.executeFileInOutputChannel(document, clearPreviousOutput, preserveFocus);
-        }
+        const filePath = document.fileName.split("\\").join("/");
+        ctx.runText(`run ${filePath}`);
+
+        // const runInTerminal = ctx.config.get("runInTerminal");
+        // const clearPreviousOutput = ctx.config.get("clearPreviousOutput");
+        // const preserveFocus = ctx.config.get("preserveFocus");
+        // if (runInTerminal) {
+        //     ctx.executeFileInTerminal(document, clearPreviousOutput, preserveFocus);
+        // } else {
+        //     ctx.executeFileInOutputChannel(document, clearPreviousOutput, preserveFocus);
+        // }
     };
 }
 
