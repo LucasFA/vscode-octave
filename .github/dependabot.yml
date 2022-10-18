@@ -5,6 +5,7 @@ updates:
     schedule:
       interval: "weekly"
   - package-ecosystem: "npm"
-    directory: "/node_modules"
+    # Look for `package.json` and `lock` files in the `root` directory
+    directory: "/"
     schedule: 
       interval: "weekly"
