@@ -3,6 +3,7 @@ import * as path from "path";
 import * as vscode from "vscode";
 import { ChildProcess, execFile } from 'child_process';
 import * as fs from 'fs';
+import treeKill = require("tree-kill");
 
 import * as globals from "./globals";
 import { Config } from "./Cfg";
@@ -160,10 +161,9 @@ export default class Ctx implements vscode.Disposable {
         this._terminal?.dispose();
         this._outputChannel.dispose();
 
-        if (this.isRunning) {
-            this.isRunning = false;
-            const kill = require("tree-kill");
-            kill(this._process?.pid);
+        if (this.isRunning && this._process?.pid) {
+            treeKill(this._process.pid);
         }
+        this.isRunning = false;
     }
 }
