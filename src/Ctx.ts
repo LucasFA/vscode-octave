@@ -140,7 +140,7 @@ export default class Ctx implements vscode.Disposable {
 
         const args = [path.basename(filePath)];
         const options = { cwd: path.dirname(filePath) };
-        this._process = execFile(octaveLocation, args, options, (error: Error , stdout: string, stderr: string) => {
+        this._process = execFile(octaveLocation, args, options, (error, stdout, stderr) => {
             if (error) {
                 this._outputChannel.appendLine(`[Error] ${error.message}`);
             }
