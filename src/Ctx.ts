@@ -93,7 +93,7 @@ export default class Ctx implements vscode.Disposable {
         this._extCtx.subscriptions.push(d);
     }
 
-    registerCommand(name: string, factory: (ctx: Ctx) => Cmd) {
+    public registerCommand(name: string, factory: (ctx: Ctx) => Cmd) {
         const fullName = `octave.${name}`;
         const cmd = factory(this);
         const d = vscode.commands.registerCommand(fullName, cmd);

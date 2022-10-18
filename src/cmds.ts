@@ -2,7 +2,13 @@ import * as vscode from "vscode";
 import Ctx, { Cmd } from "./Ctx";
 import * as util from "./util";
 
-export function runLines(ctx: Ctx): Cmd {
+export const cmd_dictionary = {
+    run: executeFile,
+    runLines: runLines,
+    stop: stopCommand,
+} as const;
+
+function runLines(ctx: Ctx): Cmd {
     return async () => {
         const editor = vscode.window.activeTextEditor;
         let code: string;
@@ -40,7 +46,7 @@ export function runLines(ctx: Ctx): Cmd {
     };
 }
 
-export function executeFile(ctx: Ctx): Cmd {
+function executeFile(ctx: Ctx): Cmd {
     return async (fileUri: vscode.Uri) => {
         if (ctx.isRunning) {
             vscode.window.showInformationMessage("Code is already running!");
@@ -72,7 +78,7 @@ export function executeFile(ctx: Ctx): Cmd {
     };
 }
 
-export function stopCommand(ctx: Ctx): Cmd {
+function stopCommand(ctx: Ctx): Cmd {
     return async () => {
         ctx.dispose();
     }

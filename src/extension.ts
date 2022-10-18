@@ -1,6 +1,6 @@
 "use strict";
 import * as vscode from "vscode";
-import * as cmds from "./cmds";
+import { cmd_dictionary } from "./cmds";
 import Ctx from "./Ctx";
 
 let ctx: Ctx;
@@ -8,10 +8,9 @@ let ctx: Ctx;
 export function activate(context: vscode.ExtensionContext) {
     ctx = Ctx.create(context);
     
-    ctx.registerCommand("run", cmds.executeFile);
-    ctx.registerCommand("runLines", cmds.runLines);
-    ctx.registerCommand("stop", cmds.stopCommand);
-
+    for (const [name, cmd] of Object.entries(cmd_dictionary)) {
+        ctx.registerCommand(name, cmd);
+    }
 }
 
 export function deactivate() {
