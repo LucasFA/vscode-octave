@@ -83,14 +83,13 @@ function getOctavefromEnvPath(): string | undefined {
 
     const envPaths = process.env.PATH?.split(splitChar);
 
-    if (envPaths) {
-        for (const env_path of envPaths) {
-            const octave_path: string = path.join(env_path, fileName);
-            if (fs.existsSync(octave_path)) {
-                return octave_path;
-            }
+    for (const env_path of envPaths ?? []) {
+        const octave_path: string = path.join(env_path, fileName);
+        if (fs.existsSync(octave_path)) {
+            return octave_path;
         }
     }
+    
     return undefined;
 }
 
