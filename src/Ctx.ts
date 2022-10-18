@@ -110,7 +110,6 @@ export default class Ctx implements vscode.Disposable {
         if (clearPreviousOutput) {
             vscode.commands.executeCommand("workbench.action.terminal.clear");
         }
-        this.terminal?.show(preserveFocus);
 
         const filePath = document.fileName.split("\\").join("/");
 
@@ -119,7 +118,7 @@ export default class Ctx implements vscode.Disposable {
         const isNonAscii = regex.test(filePath);
 
         const command = isNonAscii ? `${document.getText()}` : `run "${filePath}"`;
-        this.terminal?.sendText(command);
+        this.runText(command);
     }
 
     public executeFileInOutputChannel(document: vscode.TextDocument, clearPreviousOutput: boolean, preserveFocus: boolean): void {
