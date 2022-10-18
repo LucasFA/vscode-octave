@@ -1,5 +1,9 @@
 # Changelog
 
+## [0.6.2] 2022-10-18
+
+* Fixed a bug when running files with non-ASCII character names.
+
 ## [0.6.0] 
 
 * Matlab compatibility! The logic on whether to use an existing terminal or create a new one was based on the name of the terminal. That is a stupid idea, soon I intend to change it, but for now, calling the terminal `matlab` or `octave` (case insensitive) will make it work.

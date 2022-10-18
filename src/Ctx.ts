@@ -161,7 +161,7 @@ export default class Ctx implements vscode.Disposable {
         this._terminal?.dispose();
         this._outputChannel.dispose();
 
-        if (this.isRunning && this._process?.pid) {
+        if (this._process?.pid) {
             treeKill(this._process.pid);
         }
         this.isRunning = false;
