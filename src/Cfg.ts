@@ -81,7 +81,7 @@ export class Config<TDict extends untypedConfigFieldTypeDict> {
     public get<_T extends ConfigField, _R extends keyof TDict>(section: _T): ConfigFieldTypeDict[_T] & TDict[_R];
     public get(section: ConfigField): possibleReturnTypes | undefined {
         const packageSectionDefault = this._config.get(section) as ConfigFieldTypeDict[typeof section] | undefined;
-        if (packageSectionDefault !== undefined) {
+        if (packageSectionDefault) {
             return packageSectionDefault;
         }
 
