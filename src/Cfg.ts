@@ -14,7 +14,7 @@ type ConfigFieldFull = keyof typeof settings;
 // Only then you will have automatic type checking for the setting.
 type ConfigFieldTypeDict = {
     [key in ConfigFieldFull as key extends `${typeof globals.EXTENSION_NAME}.${infer R}` ? R : never]: // remove the "octave." prefix from the key
-    typeof settings[key] extends { default: infer R } ? R : unknown
+    typeof settings[key] extends { default: infer R; } ? R : unknown
 };
 
 export type ConfigField = keyof ConfigFieldTypeDict;
