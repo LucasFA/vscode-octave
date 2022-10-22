@@ -1,8 +1,5 @@
 import * as vscode from "vscode";
 import * as globals from "./globals";
-import * as fs from 'fs';
-import * as path from 'path';
-import { configCallbacks } from "./ConfigCallbacks";
 import * as packageJSON from '../package.json';
 
 
@@ -39,7 +36,6 @@ type ConfigFieldTypeDict = {
 type untypedConfigFieldTypeDict = Partial<ConfigFieldTypeDict>;
 
 type possibleReturnTypes = ConfigFieldTypeDict[keyof ConfigFieldTypeDict];
-
 
 export class Config<TDict extends untypedConfigFieldTypeDict> {
     private _config: vscode.WorkspaceConfiguration;

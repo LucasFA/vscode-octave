@@ -1,6 +1,5 @@
 import * as fs from 'fs';
 import * as path from 'path';
-import { configCallbackDictionary } from './Cfg';
 
 // TODO: I want to add a type to this indicating the keys are configFields and the values are configCallbacks
 export const configCallbacks = {
