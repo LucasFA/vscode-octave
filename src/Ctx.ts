@@ -6,13 +6,16 @@ import * as fs from 'fs';
 import treeKill = require("tree-kill");
 
 import * as globals from "./globals";
-import { Config } from "./Cfg";
+import { Config, ConfigField } from "./Cfg";
+import { configCallbacks } from "./ConfigCallbacks";
 
 export type Cmd = (...args: any[]) => unknown;
 
 export default class Ctx implements vscode.Disposable {
     private _extCtx: vscode.ExtensionContext;
-    private _config: Config;
+    private _config: Config<{
+        [key in keyof typeof configCallbacks]: ReturnType<typeof configCallbacks[key]>;
+    }>;
     private _outputChannel: vscode.OutputChannel;
     private _terminal: vscode.Terminal | undefined;
     public isRunning: boolean;
@@ -25,6 +28,9 @@ export default class Ctx implements vscode.Disposable {
         this._extCtx = extCtx;
         this._extCtx.subscriptions.push(this);
         this._config = new Config(this._extCtx);
+        for (const [name, cb] of Object.entries(configCallbacks)) {
+            this._config.registerFallbackSetting(name as ConfigField, cb);
+        }
         this._outputChannel = outputChannel;
         this.isRunning = false;
 
@@ -37,7 +43,7 @@ export default class Ctx implements vscode.Disposable {
         return new Ctx(extCtx, outputChannel);
     }
 
-    get config(): Config {
+    get config() {
         return this._config;
     }
 
@@ -68,10 +74,10 @@ export default class Ctx implements vscode.Disposable {
 
         // No appropiate terminals. Create
         // TODO: add field for shellArgs from user (settings)
-
         const octavePath = this.config.get("octaveLocation");
         if (octavePath === undefined) {
-            return;
+            vscode.window.showErrorMessage("Octave path not found. Please set the path to Octave in the settings.");
+            return undefined;
         }
         const workspace = vscode.workspace.workspaceFolders;
         if (!workspace) {

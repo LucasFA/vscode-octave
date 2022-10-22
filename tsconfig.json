@@ -5,7 +5,8 @@
         "outDir": "out",
         "strict": true, 
         "sourceMap": true,
-        "rootDir": "src"
+        "rootDir": ".",
+        "resolveJsonModule": true,
     },
     "exclude": [
         "node_modules",

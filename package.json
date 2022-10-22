@@ -30,7 +30,7 @@
 	"extensionKind": [
 		"workspace"
 	],
-	"main": "./out/extension",
+	"main": "./out/src/extension",
 	"contributes": {
 		"commands": [
 			{
@@ -100,7 +100,6 @@
 				},
 				"octave.octaveLocation": {
 					"type": "string",
-					"default": "",
 					"description": "Full path to the octave executable. By default searches the environment PATH variable",
 					"scope": "window"
 				}
