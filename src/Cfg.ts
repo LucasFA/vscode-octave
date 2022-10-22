@@ -91,14 +91,14 @@ export class Config<TDict extends untypedConfigFieldTypeDict> {
 
         return undefined;
     }
-    public has(section: ConfigFieldFull) {
+    public has(section: ConfigField) {
         return this._config.has(section);
     }
     public inspect<T>(section: ConfigField): undefined | { key: string; defaultValue?: T; globalValue?: T; workspaceValue?: T; workspaceFolderValue?: T; defaultLanguageValue?: T; globalLanguageValue?: T; workspaceLanguageValue?: T; workspaceFolderLanguageValue?: T; languageIds?: string[]; } {
         return this._config.inspect<T>(section);
     }
 
-    public update(section: ConfigField, value: any, configurationTarget?: vscode.ConfigurationTarget): Thenable<void> {
+    public update(section: ConfigField, value: TDict[typeof section], configurationTarget?: vscode.ConfigurationTarget): Thenable<void> {
         return this._config.update(section, value, configurationTarget);
     }
 }
