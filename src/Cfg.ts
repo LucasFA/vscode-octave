@@ -2,39 +2,23 @@ import * as vscode from "vscode";
 import * as globals from "./globals";
 import * as packageJSON from '../package.json';
 
-
-// function isConfigField(s: string): s is ConfigField {
-//     const settings = packageJSON.contributes.configuration.properties;
-//     return `${globals.EXTENSION_NAME}.${s}` in Object.keys(settings);
-// }
-
-const settings = packageJSON.contributes.configuration.properties;
-type ConfigFieldFull = keyof typeof settings;
-export type ConfigField = ConfigFieldFull extends `${typeof globals.EXTENSION_NAME}.${infer T}` ? T : never;
-
-
-interface setting {
-    type: string;
-    description: string;
-    scope: string;
-}
-
-interface settingWithDefault<T> extends setting {
-    default: T;
-}
+const settings = packageJSON.contributes?.configuration?.properties;
 
 type configCallback<T> = () => (T | undefined);
 export type configCallbackDictionary = { [key in ConfigField]?: configCallback<ConfigFieldTypeDict[key]> };
+
+type ConfigFieldFull = keyof typeof settings;
 
 // Are you here because you want to add a new config option but there's some unknown type shenanigans?
 // You may want to add a default value for the setting in the package.json file.
 // Only then you will have automatic type checking for the setting.
 type ConfigFieldTypeDict = {
     [key in ConfigFieldFull as key extends `${typeof globals.EXTENSION_NAME}.${infer R}` ? R : never]: // remove the "octave." prefix from the key
-    typeof settings[key] extends settingWithDefault<infer R> ? R : unknown // if it has a default value of type R, use R
+    typeof settings[key] extends { default: infer R } ? R : unknown
 };
-type untypedConfigFieldTypeDict = Partial<ConfigFieldTypeDict>;
 
+export type ConfigField = keyof ConfigFieldTypeDict;
+type untypedConfigFieldTypeDict = Partial<ConfigFieldTypeDict>;
 type possibleReturnTypes = ConfigFieldTypeDict[keyof ConfigFieldTypeDict];
 
 export class Config<TDict extends untypedConfigFieldTypeDict> {
