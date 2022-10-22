@@ -78,7 +78,8 @@ export class Config<TDict extends untypedConfigFieldTypeDict> {
      */
     // so the resulting type is the best from the type in
     // package.json and the return type of the callback(ie the intersection of the two)
-    public get<_T extends ConfigField, _R extends keyof TDict>(section: _T): ConfigFieldTypeDict[_T] & TDict[_R];
+    public get<_T extends ConfigField & keyof TDict>(section: _T): ConfigFieldTypeDict[_T] & TDict[_T];
+    public get<_T extends ConfigField>(section: _T): ConfigFieldTypeDict[_T];
     public get(section: ConfigField): possibleReturnTypes | undefined {
         const packageSectionDefault = this._config.get(section) as ConfigFieldTypeDict[typeof section] | undefined;
         if (packageSectionDefault) {
