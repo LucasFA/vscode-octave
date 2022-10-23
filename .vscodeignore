@@ -1,7 +1,9 @@
-.vscode/**
-.vscode-test/**
+.vscode/
+.vscode-test/
 .gitignore
 tsconfig.json
 tslint.json
 src/
-src/**
+*.md
+!README.md
+.github/
