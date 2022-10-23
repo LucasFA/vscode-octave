@@ -6,4 +6,5 @@ tslint.json
 src/
 *.md
 !README.md
+!LICENSE.md
 .github/
