@@ -1,5 +1,3 @@
-"use strict";
-
 export const LANGUAGE_NAME = "Octave";
 export const MATLAB_NAME = "Matlab";
 export const LANGUAGE_ID = "octave";

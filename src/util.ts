@@ -1,6 +1,4 @@
-"use strict";
 import * as vscode from "vscode";
-
 
 export async function saveDocument(document: vscode.TextDocument): Promise<boolean> {
     if (document.isUntitled) {
