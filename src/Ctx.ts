@@ -112,7 +112,8 @@ export default class Ctx implements vscode.Disposable {
         this.terminal?.sendText(code);
     };
 
-    public executeFileInTerminal(document: vscode.TextDocument, clearPreviousOutput: boolean, preserveFocus: boolean): void {
+    public executeFileInTerminal(document: vscode.TextDocument): void {
+        const clearPreviousOutput = this.config.get("clearPreviousOutput");
         if (clearPreviousOutput) {
             vscode.commands.executeCommand("workbench.action.terminal.clear");
         }
@@ -127,12 +128,14 @@ export default class Ctx implements vscode.Disposable {
         this.runText(command);
     }
 
-    public executeFileInOutputChannel(document: vscode.TextDocument, clearPreviousOutput: boolean, preserveFocus: boolean): void {
+    public executeFileInOutputChannel(document: vscode.TextDocument): void {
         const filePath = document.fileName.split("\\").join("/");
+        const clearPreviousOutput = this.config.get("clearPreviousOutput");
         if (clearPreviousOutput) {
             this._outputChannel.clear();
         }
         this.isRunning = true;
+        const preserveFocus =  this.config.get("preserveFocus")
         this._outputChannel.show(preserveFocus);
         this._outputChannel.appendLine(`[Running] ${path.basename(filePath)}`);
         this._outputChannel.appendLine("");
