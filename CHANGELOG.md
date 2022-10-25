@@ -1,5 +1,10 @@
 # Changelog
 
+## [0.7.0] 2022-10-25
+* NOTICE: This *IS* a breaking change for files that change the working directory. Consider using the new setting.
+* Now we use relative paths for locating the file by default.
+* Added a setting to always use absolute paths instead, `octave.alwaysUseAbsolutePaths`. Running whole files in the terminal will use the absolute path instead of the relative path. This is to avoid issues with changing the working directory inside the file. However, if the absolute path contains non-ASCII characters, it will result in a very verbose (but correct) output, including commands along with output.
+
 ## [0.6.2] 2022-10-18
 
 * Fixed a bug when running files with non-ASCII character names.
