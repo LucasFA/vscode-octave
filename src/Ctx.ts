@@ -16,6 +16,7 @@ export default class Ctx implements vscode.Disposable {
     }>;
     private _outputChannel: vscode.OutputChannel;
     private _terminal: vscode.Terminal | undefined;
+    private _terminalStartingWd: string | undefined;
     public isRunning: boolean;
     private _process: ChildProcess | undefined;
 
@@ -82,6 +83,7 @@ export default class Ctx implements vscode.Disposable {
             vscode.window.showWarningMessage("No workspace folder found. Unknown directory where Octave will open.");
         }
         const workspacePath = workspace ? workspace[0].uri.fsPath : undefined;
+        this._terminalStartingWd = workspacePath;
         const terminalOptions: vscode.TerminalOptions = {
             name: globals.LANGUAGE_NAME,
             shellPath: octavePath,
@@ -111,27 +113,36 @@ export default class Ctx implements vscode.Disposable {
         this.terminal?.sendText(code);
     };
 
-    public executeFileInTerminal(document: vscode.TextDocument, clearPreviousOutput: boolean, preserveFocus: boolean): void {
+    public executeFileInTerminal(document: vscode.TextDocument): void {
+        const clearPreviousOutput = this.config.get("clearPreviousOutput");
         if (clearPreviousOutput) {
             vscode.commands.executeCommand("workbench.action.terminal.clear");
         }
 
-        const filePath = document.fileName.split("\\").join("/");
-
+        const useAbsPath = this.config.get("alwaysUseAbsolutePaths");
+        const filePath = document.fileName;
+        let finalFilePath = filePath;
+        const wd = this._terminalStartingWd;
+        if (!useAbsPath && typeof wd === "string") {
+            finalFilePath = "./" + path.relative(wd, filePath);
+        }
+        finalFilePath = finalFilePath.split("\\").join("/");
         // regex for non-ascii characters
         const regex: RegExp = /[^\x00-\x7F]/g;
         const isNonAscii = regex.test(filePath);
 
-        const command = isNonAscii ? `${document.getText()}` : `run "${filePath}"`;
+        const command = isNonAscii ? `${document.getText()}` : `run "${finalFilePath}"`;
         this.runText(command);
     }
 
-    public executeFileInOutputChannel(document: vscode.TextDocument, clearPreviousOutput: boolean, preserveFocus: boolean): void {
+    public executeFileInOutputChannel(document: vscode.TextDocument): void {
         const filePath = document.fileName.split("\\").join("/");
+        const clearPreviousOutput = this.config.get("clearPreviousOutput");
         if (clearPreviousOutput) {
             this._outputChannel.clear();
         }
         this.isRunning = true;
+        const preserveFocus =  this.config.get("preserveFocus")
         this._outputChannel.show(preserveFocus);
         this._outputChannel.appendLine(`[Running] ${path.basename(filePath)}`);
         this._outputChannel.appendLine("");
