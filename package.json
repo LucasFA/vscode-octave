@@ -2,7 +2,7 @@
 	"name": "octaveexecution",
 	"displayName": "Octave Execution",
 	"description": "Octave Language execution and keybinding support for VSCode.",
-	"version": "0.6.2",
+	"version": "0.7.0",
 	"icon": "images/icon.png",
 	"publisher": "LucasFA",
 	"engines": {
@@ -103,7 +103,7 @@
 					"description": "Full path to the octave executable. By default searches the environment PATH variable",
 					"scope": "window"
 				},
-				"octave.alwaysUseAbsolutePaths" : {
+				"octave.alwaysUseAbsolutePaths": {
 					"type": "boolean",
 					"default": false,
 					"description": "Running files in terminal will use absolute paths, instead of relative paths. Use for compatibility with files that change the working directory",
