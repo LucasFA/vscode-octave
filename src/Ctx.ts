@@ -120,10 +120,11 @@ export default class Ctx implements vscode.Disposable {
             vscode.commands.executeCommand("workbench.action.terminal.clear");
         }
 
+        const useAbsPath = this.config.get("alwaysUseAbsolutePaths");
         const filePath = document.fileName;
-        const wd = this._terminalStartingWd;
         let finalFilePath = filePath;
-        if (typeof wd === "string") {
+        const wd = this._terminalStartingWd;
+        if (!useAbsPath && typeof wd === "string") {
             finalFilePath = "./" + path.relative(wd, filePath);
         }
         finalFilePath = finalFilePath.split("\\").join("/");
