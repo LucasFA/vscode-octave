@@ -1,5 +1,8 @@
 # Changelog
 
+## [0.7.1] 2022-10-27
+* Slightly change the logic on whether to use relative or absolute paths: it will use absolute paths as long as they are ASCII.
+
 ## [0.7.0] 2022-10-25
 * NOTICE: This *IS* a breaking change for files that change the working directory. Consider using the new setting.
 * Now we use relative paths for locating the file by default.

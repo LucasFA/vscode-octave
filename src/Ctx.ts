@@ -119,19 +119,16 @@ export default class Ctx implements vscode.Disposable {
             vscode.commands.executeCommand("workbench.action.terminal.clear");
         }
 
-        const useAbsPath = this.config.get("alwaysUseAbsolutePaths");
-        const filePath = document.fileName;
-        let finalFilePath = filePath;
+        const isAscii = (str: string) => /^[\x00-\x7F]*$/.test(str);
+        let filePath = document.fileName;
+        const useAbsPath = isAscii(filePath) || this.config.get("alwaysUseAbsolutePaths");
         const wd = this._terminalStartingWd;
-        if (!useAbsPath && typeof wd === "string") {
-            finalFilePath = "./" + path.relative(wd, filePath);
+        if (!useAbsPath && wd !== undefined) {
+            filePath = "./" + path.relative(wd, filePath);
         }
-        finalFilePath = finalFilePath.split("\\").join("/");
-        // regex for non-ascii characters
-        const regex: RegExp = /[^\x00-\x7F]/g;
-        const isNonAscii = regex.test(filePath);
+        filePath = filePath.split("\\").join("/");
 
-        const command = isNonAscii ? `${document.getText()}` : `run "${finalFilePath}"`;
+        const command = isAscii(filePath) ? `run "${filePath}"` : document.getText();
         this.runText(command);
     }
 
@@ -142,7 +139,7 @@ export default class Ctx implements vscode.Disposable {
             this._outputChannel.clear();
         }
         this.isRunning = true;
-        const preserveFocus =  this.config.get("preserveFocus")
+        const preserveFocus = this.config.get("preserveFocus");
         this._outputChannel.show(preserveFocus);
         this._outputChannel.appendLine(`[Running] ${path.basename(filePath)}`);
         this._outputChannel.appendLine("");
