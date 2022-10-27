@@ -1,7 +1,7 @@
 import * as path from "path";
 import * as vscode from "vscode";
 import { ChildProcess, execFile } from 'child_process';
-import treeKill = require("tree-kill");
+import * as treeKill from 'tree-kill';
 
 import * as globals from "./globals";
 import { Config, ConfigField } from "./Cfg";

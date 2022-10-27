@@ -2,11 +2,7 @@ import * as vscode from "vscode";
 import * as globals from "./globals";
 import * as packageJSON from '../package.json';
 
-const settings = packageJSON.contributes?.configuration?.properties;
-
-type configCallback<T> = () => (T | undefined);
-export type configCallbackDictionary = { [key in ConfigField]?: configCallback<ConfigFieldTypeDict[key]> };
-
+const settings = packageJSON.contributes.configuration.properties;
 type ConfigFieldFull = keyof typeof settings;
 
 // Are you here because you want to add a new config option but there's some unknown type shenanigans?
@@ -16,12 +12,14 @@ type ConfigFieldTypeDict = {
     [key in ConfigFieldFull as key extends `${typeof globals.EXTENSION_NAME}.${infer SName}` ? SName : never]: // remove the "octave." prefix from the key
     typeof settings[key] extends { default: infer SType; } ? SType : unknown
 };
-
 export type ConfigField = keyof ConfigFieldTypeDict;
-type untypedConfigFieldTypeDict = Partial<ConfigFieldTypeDict>;
+type partialConfigFieldTypeDict = Partial<ConfigFieldTypeDict>;
 type possibleReturnTypes = ConfigFieldTypeDict[keyof ConfigFieldTypeDict];
 
-export class Config<TDict extends untypedConfigFieldTypeDict> {
+type configCallback<T> = () => (T | undefined);
+export type configCallbackDictionary = { [key in ConfigField]?: configCallback<ConfigFieldTypeDict[key]> };
+
+export class Config<TDict extends partialConfigFieldTypeDict> {
     private _config: vscode.WorkspaceConfiguration;
     private _otherDefaultsCallbacks: configCallbackDictionary;
 

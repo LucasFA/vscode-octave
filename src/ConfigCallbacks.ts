@@ -8,13 +8,12 @@ export const configCallbacks = {
 
 function getOctavefromEnvPath(): string | undefined {
     let fileRoot = "octave";
-    let splitChar = ':';
+    const splitChar = path.delimiter;
     let fileExtension = '';
 
     const platform = process.platform;
     if (platform === 'win32') {
         fileRoot += "-cli";
-        splitChar = ';';
         fileExtension = '.exe';
     }
     const fileName = fileRoot + fileExtension;
