@@ -4,12 +4,14 @@ import * as packageJSON from '../package.json';
 
 const settings = packageJSON.contributes.configuration.properties;
 type ConfigFieldFull = keyof typeof settings;
+// type holding the prefix before the point of ConfigFieldFull
+type prefix = ConfigFieldFull extends `${infer P}.${infer R}` ? P : never;
 
 // Are you here because you want to add a new config option but there's some unknown type shenanigans?
 // You may want to add a default value for the setting in the package.json file.
 // Only then you will have automatic type checking for the setting.
 type ConfigFieldTypeDict = {
-    [key in ConfigFieldFull as key extends `${typeof globals.EXTENSION_NAME}.${infer SName}` ? SName : never]: // remove the "octave." prefix from the key
+    [key in ConfigFieldFull as key extends `${prefix}.${infer SName}` ? SName : never]: // remove the settings prefix from the key
     typeof settings[key] extends { default: infer SType; } ? SType : unknown
 };
 export type ConfigField = keyof ConfigFieldTypeDict;
