@@ -1,7 +1,8 @@
 import * as fs from 'fs';
 import * as path from 'path';
 
-// TODO: I want to add a type to this indicating the keys are configFields and the values are configCallbacks
+// NOTE: I wanted to add a typecheck to this indicating the keys are configFields and the values are configCallbacks,
+// but really this is typechecked when calling the generic constructor of Config
 export const configCallbacks = {
     octaveLocation: getOctavefromEnvPath
 } as const;
