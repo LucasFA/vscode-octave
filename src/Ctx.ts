@@ -95,17 +95,12 @@ export default class Ctx implements vscode.Disposable {
         return this._terminal;
     }
 
-    public push(d: vscode.Disposable): void {
-        this._extCtx.subscriptions.push(d);
-    }
-
     public registerCommand(name: string, factory: (ctx: Ctx) => Cmd) {
         const fullName = `octave.${name}`;
         const cmd = factory(this);
         const d = vscode.commands.registerCommand(fullName, cmd);
-        this.push(d);
+        this._extCtx.subscriptions.push(d);
     }
-
 
     public runText(code: string): void {
         const preserveFocus = this.config.get("preserveFocus");
