@@ -42,7 +42,7 @@ export default class Ctx implements vscode.Disposable {
         return new Ctx(extCtx, outputChannel);
     }
 
-    get config() {
+    private get config() {
         return this._config;
     }
 
@@ -108,7 +108,12 @@ export default class Ctx implements vscode.Disposable {
         this.terminal?.sendText(code);
     };
 
-    public executeFileInTerminal(document: vscode.TextDocument): void {
+    public executeFile(document: vscode.TextDocument) {
+        return this.config.get("runInTerminal") ?
+            this.executeFileInTerminal(document) :
+            this.executeFileInOutputChannel(document);
+    }
+    private executeFileInTerminal(document: vscode.TextDocument): void {
         const clearPreviousOutput = this.config.get("clearPreviousOutput");
         if (clearPreviousOutput) {
             vscode.commands.executeCommand("workbench.action.terminal.clear");
@@ -127,7 +132,7 @@ export default class Ctx implements vscode.Disposable {
         this.runText(command);
     }
 
-    public executeFileInOutputChannel(document: vscode.TextDocument): void {
+    private executeFileInOutputChannel(document: vscode.TextDocument): void {
         const filePath = document.fileName.split("\\").join("/");
         const clearPreviousOutput = this.config.get("clearPreviousOutput");
         if (clearPreviousOutput) {

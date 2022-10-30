@@ -67,12 +67,7 @@ function executeFile(ctx: Ctx): Cmd {
             return;
         }
 
-        const runInTerminal = ctx.config.get("runInTerminal");
-        if (runInTerminal) {
-            ctx.executeFileInTerminal(document);
-        } else {
-            ctx.executeFileInOutputChannel(document);
-        }
+        ctx.executeFile(document);
     };
 }
 
