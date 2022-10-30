@@ -6,7 +6,7 @@ export async function saveDocument(document: vscode.TextDocument): Promise<boole
         return false;
     }
 
-    const isSaved: boolean = document.isDirty ? (await document.save()) : true;
+    const isSaved = document.isDirty ? (await document.save()) : true;
     if (!isSaved) {
         vscode.window.showErrorMessage('Cannot run command. Document could not be saved.');
     }

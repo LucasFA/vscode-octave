@@ -32,8 +32,6 @@ export default class Ctx implements vscode.Disposable {
         }
         this._outputChannel = outputChannel;
         this.isRunning = false;
-
-        // Default values should be specified in package.json
     }
 
     static create(extCtx: vscode.ExtensionContext): Ctx {
@@ -50,13 +48,12 @@ export default class Ctx implements vscode.Disposable {
         function isRunning(term: vscode.Terminal | undefined): term is vscode.Terminal {
             return term !== undefined && term.exitStatus === undefined;
         }
-        // Don't create redundant terminals. Use existing Octave terminals if they exist.
+
         if (isRunning(this._terminal)) {
             return this._terminal;
         }
 
-
-        let tempCandidateNames = [globals.LANGUAGE_NAME, globals.MATLAB_NAME];
+        const tempCandidateNames = [globals.LANGUAGE_NAME, globals.MATLAB_NAME] as const;
         const terminalCandidateNames = tempCandidateNames.map((name) => name.toLocaleLowerCase());
 
         function isValidTerminal(term: vscode.Terminal | undefined): term is vscode.Terminal {
