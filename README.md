@@ -33,7 +33,7 @@ Running the current document might run it on the terminal or on an output channe
 ## Known issues
 
 - Currently plots are not presented when running a script in an output channel. As a workaround, run the script in the terminal: set `octave.runInTerminal` to `true`.
-- If executing a file with non-ASCII characters in the file path, the output will include the code executed in addition to the output of the script.
+- If executing a file with non-ASCII characters in the relative file path (or absolute, if the setting `octave.alwaysUseAbsolutePaths` is set to `True`), the output will include the code executed in addition to the output of the script. This is a limitation of the Octave command line interface. As a workaround, use only ASCII characters in the file path.
 
 ## Release Notes
  See [CHANGELOG.md](https://github.com/LucasFA/vscode-octave/blob/master/CHANGELOG.md)
