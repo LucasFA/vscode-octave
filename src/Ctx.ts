@@ -88,7 +88,12 @@ export default class Ctx implements vscode.Disposable {
             cwd: workspacePath
         };
 
-        this._terminal = vscode.window.createTerminal(terminalOptions);
+        try {
+            this._terminal = vscode.window.createTerminal(terminalOptions);
+        } catch (error) {
+            vscode.window.showErrorMessage("Could not create Octave terminal.");
+            return undefined;
+        }
         return this._terminal;
     }
 
