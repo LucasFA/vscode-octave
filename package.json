@@ -147,7 +147,7 @@
 		"tree-kill": "^1.2.2"
 	},
 	"devDependencies": {
-		"@types/node": "^18.11.8",
+		"@types/node": "^18.11.9",
 		"@types/vscode": "^1.73.0",
 		"typescript": "^4.8.4"
 	},
