@@ -11,8 +11,8 @@ type prefix = ConfigFieldFull extends `${infer P}.${infer R}` ? P : never;
 // You may want to add a default value for the setting in the package.json file.
 // Only then you will have automatic type checking for the setting.
 type ConfigFieldTypeDict = {
-    [key in ConfigFieldFull as key extends `${prefix}.${infer SName}` ? SName : never]: // remove the settings prefix from the key
-    typeof settings[key] extends { default: infer SType; } ? SType : unknown
+    [key in ConfigFieldFull as key extends `${prefix}.${infer SettingName}` ? SettingName : never]: // remove the settings prefix from the key
+    typeof settings[key] extends { default: infer SettingType; } ? SettingType : unknown
 };
 export type ConfigField = keyof ConfigFieldTypeDict;
 type partialConfigFieldTypeDict = Partial<ConfigFieldTypeDict>;
@@ -21,7 +21,7 @@ type possibleReturnTypes = ConfigFieldTypeDict[keyof ConfigFieldTypeDict];
 type configCallback<T> = () => (T | undefined);
 export type configCallbackDictionary = { [key in ConfigField]?: configCallback<ConfigFieldTypeDict[key]> };
 
-export class Config<TDict extends partialConfigFieldTypeDict> {
+export class Config<CbTDict extends partialConfigFieldTypeDict> {
     private _config: vscode.WorkspaceConfiguration;
     private _otherDefaultsCallbacks: configCallbackDictionary;
 
@@ -58,7 +58,7 @@ export class Config<TDict extends partialConfigFieldTypeDict> {
      */
     // so the resulting type is the best from the type in
     // package.json and the return type of the callback(ie the intersection of the two)
-    public get<_T extends ConfigField & keyof TDict>(section: _T): ConfigFieldTypeDict[_T] & TDict[_T];
+    public get<_T extends ConfigField & keyof CbTDict>(section: _T): ConfigFieldTypeDict[_T] & CbTDict[_T];
     public get<_T extends ConfigField>(section: _T): ConfigFieldTypeDict[_T];
     public get(section: ConfigField): possibleReturnTypes | undefined {
         const packageSectionDefault = this._config.get(section) as ConfigFieldTypeDict[typeof section] | undefined;
@@ -82,7 +82,7 @@ export class Config<TDict extends partialConfigFieldTypeDict> {
         return this._config.inspect<T>(section);
     }
 
-    public update(section: ConfigField, value: TDict[typeof section], configurationTarget?: vscode.ConfigurationTarget): Thenable<void> {
+    public update(section: ConfigField, value: CbTDict[typeof section], configurationTarget?: vscode.ConfigurationTarget): Thenable<void> {
         return this._config.update(section, value, configurationTarget);
     }
 }
