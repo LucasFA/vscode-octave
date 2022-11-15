@@ -18,32 +18,20 @@ export type ConfigField = keyof ConfigFieldTypeDict;
 type partialConfigFieldTypeDict = Partial<ConfigFieldTypeDict>;
 type possibleReturnTypes = ConfigFieldTypeDict[keyof ConfigFieldTypeDict];
 
-type configCallback<T> = () => (T | undefined);
-export type configCallbackDictionary = { [key in ConfigField]?: configCallback<ConfigFieldTypeDict[key]> };
+export type configCallbackDictionary = { readonly [key in ConfigField]?: () => ConfigFieldTypeDict[key] | undefined };
 
 export class Config<CbTDict extends partialConfigFieldTypeDict> {
     private _config: vscode.WorkspaceConfiguration;
     private _otherDefaultsCallbacks: configCallbackDictionary;
 
-    constructor(extCtx: vscode.ExtensionContext) {
+    constructor(extCtx: vscode.ExtensionContext, otherDefaultsCallbacks: configCallbackDictionary = {}) {
         this._config = vscode.workspace.getConfiguration(globals.EXTENSION_NAME);
 
         extCtx.subscriptions.push(vscode.workspace.onDidChangeConfiguration(() => {
             this._config = vscode.workspace.getConfiguration(globals.EXTENSION_NAME);
         }));
 
-        this._otherDefaultsCallbacks = {};
-    }
-
-    public registerFallbackSetting(section: ConfigField, callback: () => ConfigFieldTypeDict[ConfigField]): this;
-    public registerFallbackSetting(section: ConfigField, callback: () => ConfigFieldTypeDict[ConfigField] | undefined): this;
-    public registerFallbackSetting(section: ConfigField, callback: () => ConfigFieldTypeDict[ConfigField] | undefined): this {
-        if (section in this._otherDefaultsCallbacks) {
-            throw new Error(`Config field ${section} already has a fallback value`);
-        }
-
-        this._otherDefaultsCallbacks[section] = callback as any;
-        return this;
+        this._otherDefaultsCallbacks = otherDefaultsCallbacks;
     }
 
     // read https://www.javiercasas.com/articles/typescript-dependent-types for more info

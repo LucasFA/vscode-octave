@@ -26,10 +26,7 @@ export default class Ctx implements vscode.Disposable {
     ) {
         this._extCtx = extCtx;
         this._extCtx.subscriptions.push(this);
-        this._config = new Config(this._extCtx);
-        for (const [name, cb] of Object.entries(configCallbacks)) {
-            this._config.registerFallbackSetting(name as ConfigField, cb);
-        }
+        this._config = new Config(this._extCtx, configCallbacks);
         this._outputChannel = outputChannel;
         this.isRunning = false;
     }
