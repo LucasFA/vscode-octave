@@ -9,7 +9,7 @@ import { configCallbacks } from "./ConfigCallbacks";
 
 export type Cmd = (...args: any[]) => unknown;
 
-export default class Ctx implements vscode.Disposable {
+export class Ctx implements vscode.Disposable {
     private _extCtx: vscode.ExtensionContext;
     private _config: Config<{
         [key in keyof typeof configCallbacks]: ReturnType<typeof configCallbacks[key]>;

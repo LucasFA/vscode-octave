@@ -1,5 +1,5 @@
 import * as vscode from "vscode";
-import Ctx, { Cmd } from "./Ctx";
+import type { Ctx, Cmd } from "./Ctx";
 import * as util from "./util";
 
 export const cmd_dictionary = {
