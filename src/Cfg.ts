@@ -15,12 +15,11 @@ type ConfigFieldTypeDict = {
     typeof settings[key] extends { default: infer SettingType; } ? SettingType : unknown
 };
 export type ConfigField = keyof ConfigFieldTypeDict;
-type partialConfigFieldTypeDict = Partial<ConfigFieldTypeDict>;
 type possibleReturnTypes = ConfigFieldTypeDict[keyof ConfigFieldTypeDict];
 
 export type configCallbackDictionary = { readonly [key in ConfigField]?: () => ConfigFieldTypeDict[key] | undefined };
 
-export class Config<CbTDict extends partialConfigFieldTypeDict> {
+export class Config<CbTDict extends Partial<ConfigFieldTypeDict>> {
     private _config: vscode.WorkspaceConfiguration;
     private _otherDefaultsCallbacks: configCallbackDictionary;
 
