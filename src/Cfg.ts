@@ -1,18 +1,20 @@
 import * as vscode from "vscode";
 import * as globals from "./globals";
-import * as packageJSON from '../package.json';
+import type * as packageJSON from '../package.json';
 
-const settings = packageJSON.contributes.configuration.properties;
-type ConfigFieldFull = keyof typeof settings;
+type fullSettings = typeof packageJSON.contributes.configuration.properties;
+
 // type holding the prefix before the point of ConfigFieldFull
-type prefix = ConfigFieldFull extends `${infer P}.${infer R}` ? P : never;
+type prefix = keyof fullSettings extends `${infer P}.${string}` ? P : never;
 
 // Are you here because you want to add a new config option but there's some unknown type shenanigans?
 // You may want to add a default value for the setting in the package.json file.
 // Only then you will have automatic type checking for the setting.
 type ConfigFieldTypeDict = {
-    [key in ConfigFieldFull as key extends `${prefix}.${infer SettingName}` ? SettingName : never]: // remove the settings prefix from the key
-    typeof settings[key] extends { default: infer SettingType; } ? SettingType : unknown
+    [key in keyof fullSettings as key extends `${prefix}.${infer SettingName}` ? SettingName : never]:
+        fullSettings[key] extends { default: unknown; } ?
+            fullSettings[key]["default"] :
+            unknown;
 };
 export type ConfigField = keyof ConfigFieldTypeDict;
 type possibleReturnTypes = ConfigFieldTypeDict[keyof ConfigFieldTypeDict];
