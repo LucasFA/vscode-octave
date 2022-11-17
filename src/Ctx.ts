@@ -4,7 +4,7 @@ import { ChildProcess, execFile } from 'child_process';
 import * as treeKill from 'tree-kill';
 
 import * as globals from "./globals";
-import { Config, ConfigField } from "./Cfg";
+import { Config } from "./Cfg";
 import { configCallbacks } from "./ConfigCallbacks";
 
 export type Cmd = (...args: any[]) => unknown;
@@ -22,19 +22,20 @@ export class Ctx implements vscode.Disposable {
 
     private constructor(
         extCtx: vscode.ExtensionContext,
-        outputChannel: vscode.OutputChannel
-    ) {
+        cmd_dictionary: Record<string, (ctx: Ctx) => Cmd>) {
         this._extCtx = extCtx;
         this._extCtx.subscriptions.push(this);
         this._config = new Config(this._extCtx, configCallbacks);
-        this._outputChannel = outputChannel;
+        this._outputChannel = vscode.window.createOutputChannel(globals.LANGUAGE_NAME);
+        extCtx.subscriptions.push(this._outputChannel);
         this.isRunning = false;
+        for (const [name, factory] of Object.entries(cmd_dictionary)) {
+            this.registerCommand(name, factory);
+        }
     }
 
-    static create(extCtx: vscode.ExtensionContext): Ctx {
-        const outputChannel = vscode.window.createOutputChannel(globals.LANGUAGE_NAME);
-        extCtx.subscriptions.push(outputChannel);
-        return new Ctx(extCtx, outputChannel);
+    static create(extCtx: vscode.ExtensionContext, cmd_dictionary: Record<string, (ctx: Ctx) => Cmd>): Ctx {
+        return new Ctx(extCtx, cmd_dictionary);
     }
 
     private get config() {
@@ -94,7 +95,7 @@ export class Ctx implements vscode.Disposable {
         return this._terminal;
     }
 
-    public registerCommand(name: string, factory: (ctx: Ctx) => Cmd) {
+    private registerCommand(name: string, factory: (ctx: Ctx) => Cmd) {
         const fullName = `octave.${name}`;
         const cmd = factory(this);
         const d = vscode.commands.registerCommand(fullName, cmd);
