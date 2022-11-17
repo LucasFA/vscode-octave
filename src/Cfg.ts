@@ -55,11 +55,10 @@ export class Config<CbTDict extends Partial<ConfigFieldTypeDict>> {
             return packageSectionDefault;
         }
 
-        if (section in this._otherDefaultsCallbacks) {
-            const cb = this._otherDefaultsCallbacks[section];
-            if (cb !== undefined) {
-                return cb();
-            }
+        const cb = this._otherDefaultsCallbacks[section];
+        // TODO: what's up with this typescript stuff? it shouldn't need the extra check
+        if (cb !== undefined) {
+            return cb();
         }
 
         return undefined;
