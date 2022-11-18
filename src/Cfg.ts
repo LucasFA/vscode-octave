@@ -4,16 +4,13 @@ import type * as packageJSON from '../package.json';
 
 type fullSettings = typeof packageJSON.contributes.configuration.properties;
 
-// type holding the prefix before the point of ConfigFieldFull
-type prefix = keyof fullSettings extends `${infer P}.${string}` ? P : never;
-
 // Are you here because you want to add a new config option but there's some unknown type shenanigans?
 // You may want to add a default value for the setting in the package.json file.
 // Only then you will have automatic type checking for the setting.
 type ConfigFieldTypeDict = {
-    [key in keyof fullSettings as key extends `${prefix}.${infer SettingName}` ? SettingName : never]:
-        fullSettings[key] extends { default: unknown; } ?
-            fullSettings[key]["default"] :
+    [key in keyof fullSettings as key extends `${string}.${infer SettingName}` ? SettingName : never]:
+        fullSettings[key] extends { default: infer DefaultT; } ?
+            DefaultT:
             unknown;
 };
 export type ConfigField = keyof ConfigFieldTypeDict;
