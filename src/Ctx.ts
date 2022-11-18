@@ -7,6 +7,7 @@ import * as globals from "./globals";
 import { Config } from "./Cfg";
 import { configCallbacks } from "./ConfigCallbacks";
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export type Cmd = (...args: any[]) => unknown;
 
 export class Ctx implements vscode.Disposable {
@@ -106,7 +107,7 @@ export class Ctx implements vscode.Disposable {
         const preserveFocus = this.config.get("preserveFocus");
         this.terminal?.show(preserveFocus);
         this.terminal?.sendText(code);
-    };
+    }
 
     public executeFile(document: vscode.TextDocument) {
         return this.config.get("runInTerminal") ?
@@ -119,6 +120,7 @@ export class Ctx implements vscode.Disposable {
             vscode.commands.executeCommand("workbench.action.terminal.clear");
         }
 
+        // eslint-disable-next-line no-control-regex
         const isAscii = (str: string) => /^[\x00-\x7F]*$/.test(str);
         let filePath = document.fileName;
         const useAbsPath = isAscii(filePath) || this.config.get("alwaysUseAbsolutePaths");
