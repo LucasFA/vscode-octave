@@ -47,13 +47,12 @@ export class Config<CbTDict extends Partial<ConfigFieldTypeDict>> {
     public get<_T extends ConfigField & keyof CbTDict>(section: _T): ConfigFieldTypeDict[_T] & CbTDict[_T];
     public get<_T extends ConfigField>(section: _T): ConfigFieldTypeDict[_T];
     public get(section: ConfigField): possibleReturnTypes | undefined {
-        const packageSectionDefault = this._config.get(section) as ConfigFieldTypeDict[typeof section] | undefined;
+        const packageSectionDefault = this._config.get(section);
         if (packageSectionDefault) {
             return packageSectionDefault;
         }
 
         const cb = this._otherDefaultsCallbacks[section];
-        // TODO: what's up with this typescript stuff? it shouldn't need the extra check
         if (cb !== undefined) {
             return cb();
         }
