@@ -1,4 +1,4 @@
-import * as vscode from "vscode";
+import type * as vscode from "vscode";
 import { cmd_dictionary } from "./cmds";
 import { Ctx } from "./Ctx";
 

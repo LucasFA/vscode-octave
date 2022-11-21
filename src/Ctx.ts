@@ -11,11 +11,11 @@ import { configCallbacks } from "./ConfigCallbacks";
 export type Cmd = (...args: any[]) => unknown;
 
 export class Ctx implements vscode.Disposable {
-    private _extCtx: vscode.ExtensionContext;
-    private _config: Config<{
+    private readonly _extCtx: vscode.ExtensionContext;
+    private readonly _config: Config<{
         [key in keyof typeof configCallbacks]: ReturnType<typeof configCallbacks[key]>;
     }>;
-    private _outputChannel: vscode.OutputChannel;
+    private readonly _outputChannel: vscode.OutputChannel;
     private _terminal: vscode.Terminal | undefined;
     private _terminalStartingWd: string | undefined;
     public isRunning: boolean;
@@ -28,7 +28,6 @@ export class Ctx implements vscode.Disposable {
         this._extCtx.subscriptions.push(this);
         this._config = new Config(this._extCtx, configCallbacks);
         this._outputChannel = vscode.window.createOutputChannel(globals.LANGUAGE_NAME);
-        extCtx.subscriptions.push(this._outputChannel);
         this.isRunning = false;
         for (const [name, factory] of Object.entries(cmd_dictionary)) {
             this.registerCommand(name, factory);
