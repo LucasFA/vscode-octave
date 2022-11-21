@@ -20,7 +20,7 @@ export type configCallbackDictionary = { readonly [key in ConfigField]?: () => C
 
 export class Config<CbTDict extends Partial<ConfigFieldTypeDict>> {
     private _config: vscode.WorkspaceConfiguration;
-    private _otherDefaultsCallbacks: configCallbackDictionary;
+    private readonly _otherDefaultsCallbacks: configCallbackDictionary;
 
     constructor(extCtx: vscode.ExtensionContext, otherDefaultsCallbacks: configCallbackDictionary = {}) {
         this._config = vscode.workspace.getConfiguration(globals.EXTENSION_NAME);
