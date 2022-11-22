@@ -127,14 +127,14 @@ export class Ctx implements vscode.Disposable {
         if (!useAbsPath && wd !== undefined) {
             filePath = "./" + path.relative(wd, filePath);
         }
-        filePath = filePath.split("\\").join("/");
+        filePath = filePath.replace("\\", "/");
 
         const command = isAscii(filePath) ? `run "${filePath}"` : document.getText();
         this.runText(command);
     }
 
     private executeFileInOutputChannel(document: vscode.TextDocument): void {
-        const filePath = document.fileName.split("\\").join("/");
+        const filePath = document.fileName.replace("\\", "/");
         const clearPreviousOutput = this.config.get("clearPreviousOutput");
         if (clearPreviousOutput) {
             this._outputChannel.clear();
