@@ -67,7 +67,7 @@ function executeFile(ctx: Ctx): Cmd {
             return;
         }
 
-        ctx.executeFile(document);
+        await ctx.executeFile(document);
     };
 }
 

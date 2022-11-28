@@ -113,10 +113,11 @@ export class Ctx implements vscode.Disposable {
             this.executeFileInTerminal(document) :
             this.executeFileInOutputChannel(document);
     }
-    private executeFileInTerminal(document: vscode.TextDocument): void {
+    private async executeFileInTerminal(document: vscode.TextDocument) {
         const clearPreviousOutput = this.config.get("clearPreviousOutput");
+        let prepared_terminal;
         if (clearPreviousOutput) {
-            vscode.commands.executeCommand("workbench.action.terminal.clear");
+            prepared_terminal = vscode.commands.executeCommand("workbench.action.terminal.clear");
         }
 
         // eslint-disable-next-line no-control-regex
@@ -130,6 +131,7 @@ export class Ctx implements vscode.Disposable {
         filePath = filePath.split("\\").join("/");
 
         const command = isAscii(filePath) ? `run "${filePath}"` : document.getText();
+        await prepared_terminal;
         this.runText(command);
     }
 
