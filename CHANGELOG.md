@@ -1,5 +1,8 @@
 # Changelog
 
+## [0.7.2] 2022-11-29
+* Potentially fixed a Heisenbug regarding the clearing of the terminal (commit 398235d915a046253f3adce8fcf0e32d43768458).
+
 ## [0.7.1] 2022-10-27
 * Slightly change the logic on whether to use relative or absolute paths: it will use absolute paths as long as they are ASCII.
 
