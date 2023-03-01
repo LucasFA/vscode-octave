@@ -148,7 +148,7 @@
 		"tree-kill": "^1.2.2"
 	},
 	"devDependencies": {
-		"@types/node": "^18.11.10",
+		"@types/node": "^18.14.2",
 		"@types/vscode": "1.66.0",
 		"@typescript-eslint/eslint-plugin": "^5.51.0",
 		"@typescript-eslint/parser": "^5.51.0",
