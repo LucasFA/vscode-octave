@@ -1,5 +1,8 @@
 # Changelog
 
+## [0.7.4] 2024-01-09
+* Update bundled dependencies and remove source maps from the final extension
+
 ## [0.7.2] 2022-11-29
 * Potentially fixed a Heisenbug regarding the clearing of the terminal (commit 398235d915a046253f3adce8fcf0e32d43768458).
 
