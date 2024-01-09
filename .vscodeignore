@@ -1,3 +1,6 @@
+**/*.ts
+**/*.js.map
+testing/
 .vscode/
 .vscode-test/
 .gitignore
