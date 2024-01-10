@@ -1,3 +1,5 @@
+[![Build](https://github.com/LucasFA/vscode-octave/actions/workflows/ci.yml/badge.svg)](https://github.com/LucasFA/vscode-octave/actions/workflows/ci.yml)
+
 This is a fork of leafvmaple's Octave Language extension, [also available in GitHub](https://github.com/leafvmaple/vscode-octave).
 This extension pretends to make some quality of life adjusments to it.
 
