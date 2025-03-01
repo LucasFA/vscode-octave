@@ -148,7 +148,7 @@
 		"tree-kill": "^1.2.2"
 	},
 	"devDependencies": {
-		"@types/node": "^22.10.2",
+		"@types/node": "^22.13.7",
 		"@types/vscode": "1.77.0"
 	},
 	"__metadata": {
