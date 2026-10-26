@@ -2,7 +2,7 @@
   description = "A Nix-flake-based Node.js development environment";
 
   inputs = {
-    nixpkgs.url = "github:nixos/nixpkgs/nixos-25.05";
+    nixpkgs.url = "github:nixos/nixpkgs/nixos-26.05";
   };
 
   outputs = { self , nixpkgs ,... }: let
@@ -16,7 +16,7 @@
       };
     in pkgs.mkShell {
       packages = with pkgs; [
-        nodejs_22
+        nodejs
         typescript
         vsce
         #nodePackages.pnpm
