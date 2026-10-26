@@ -136,6 +136,12 @@ export class Ctx implements vscode.Disposable {
     }
 
     private executeFileInOutputChannel(document: vscode.TextDocument): void {
+        const octaveLocation = this.config.get("octaveLocation");
+        if (octaveLocation === undefined) {
+            vscode.window.showErrorMessage("Octave path not found. Please set the path to Octave in the settings.");
+            return;
+        }
+
         const filePath = document.fileName.split("\\").join("/");
         const clearPreviousOutput = this.config.get("clearPreviousOutput");
         if (clearPreviousOutput) {
@@ -148,11 +154,6 @@ export class Ctx implements vscode.Disposable {
         this._outputChannel.appendLine("");
 
         const startTime = new Date();
-        const octaveLocation = this.config.get("octaveLocation");
-        if (octaveLocation === undefined) {
-            return;
-        }
-
         const args = [path.basename(filePath)];
         const options = { cwd: path.dirname(filePath) };
         this._process = execFile(octaveLocation, args, options, (error, stdout, stderr) => {
