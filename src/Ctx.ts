@@ -130,7 +130,14 @@ export class Ctx implements vscode.Disposable {
         }
         filePath = filePath.split("\\").join("/");
 
-        const command = isAscii(filePath) ? `run "${filePath}"` : document.getText();
+        // eslint-disable-next-line no-control-regex
+        if (/[\x00-\x1F\x7F]/.test(filePath)) {
+            vscode.window.showErrorMessage("File path contains control characters; cannot run it in the terminal.");
+            return;
+        }
+
+        // Single-quoted Octave strings have no escapes, so only ' needs doubling.
+        const command = isAscii(filePath) ? `run('${filePath.replace(/'/g, "''")}')` : document.getText();
         await prepared_terminal;
         this.runText(command);
     }
