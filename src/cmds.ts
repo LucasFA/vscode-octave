@@ -73,6 +73,6 @@ function executeFile(ctx: Ctx): Cmd {
 
 function stopCommand(ctx: Ctx): Cmd {
     return async () => {
-        ctx.dispose();
+        ctx.stop();
     }
 }

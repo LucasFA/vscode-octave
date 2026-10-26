@@ -173,13 +173,19 @@ export class Ctx implements vscode.Disposable {
         });
     }
 
-    public dispose() {
+    public stop() {
         this._terminal?.dispose();
-        this._outputChannel.dispose();
+        this._terminal = undefined;
 
         if (this._process?.pid) {
             treeKill(this._process.pid);
         }
+        this._process = undefined;
         this.isRunning = false;
+    }
+
+    public dispose() {
+        this.stop();
+        this._outputChannel.dispose();
     }
 }
