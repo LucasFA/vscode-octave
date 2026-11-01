@@ -6,6 +6,7 @@ import * as treeKill from 'tree-kill';
 import * as globals from "./globals";
 import { Config } from "./Cfg";
 import { configCallbacks } from "./ConfigCallbacks";
+import { buildLaunchEnvironment } from "./environment";
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export type Cmd = (...args: any[]) => unknown;
@@ -40,6 +41,10 @@ export class Ctx implements vscode.Disposable {
 
     private get config() {
         return this._config;
+    }
+
+    private get launchEnvironment(): Record<string, string> {
+        return buildLaunchEnvironment(this.config.get("environmentVariables"));
     }
 
     get terminal(): vscode.Terminal | undefined {
@@ -83,7 +88,8 @@ export class Ctx implements vscode.Disposable {
             name: globals.LANGUAGE_NAME,
             shellPath: octavePath,
             shellArgs: ["--quiet"],
-            cwd: workspacePath
+            cwd: workspacePath,
+            env: this.launchEnvironment
         };
 
         try {
@@ -162,7 +168,7 @@ export class Ctx implements vscode.Disposable {
 
         const startTime = new Date();
         const args = [path.basename(filePath)];
-        const options = { cwd: path.dirname(filePath) };
+        const options = { cwd: path.dirname(filePath), env: this.launchEnvironment };
         this._process = execFile(octaveLocation, args, options, (error, stdout, stderr) => {
             if (error) {
                 this._outputChannel.appendLine(`[Error] ${error.message}`);

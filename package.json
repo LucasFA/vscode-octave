@@ -108,6 +108,15 @@
 					"default": false,
 					"description": "Running files in terminal will use absolute paths, instead of relative paths. Use for compatibility with files that change the working directory",
 					"scope": "window"
+				},
+				"octave.environmentVariables": {
+					"type": "object",
+					"default": {},
+					"additionalProperties": {
+						"type": "string"
+					},
+					"markdownDescription": "Environment variables added to (or overriding) the inherited environment of Octave processes launched by the extension. Values are passed literally. Changes apply the next time Octave is launched.",
+					"scope": "window"
 				}
 			}
 		},
